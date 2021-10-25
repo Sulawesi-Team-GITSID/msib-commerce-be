@@ -15,6 +15,7 @@ type CreateCredentialBodyRequest struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Seller   bool   `json:"seller"`
+	Verified bool   `json:"verified"`
 }
 
 // CredentialRowResponse defines all attributes needed to fulfill for Credential row entity.
@@ -23,6 +24,7 @@ type CredentialRowResponse struct {
 	Username string    `json:"username"`
 	Password string    `json:"password"`
 	Seller   bool      `json:"seller"`
+	Verified bool      `json:"verified"`
 }
 
 // CredentialResponse defines all attributes needed to fulfill for pic Credential entity.
@@ -31,6 +33,7 @@ type CredentialDetailResponse struct {
 	Username string    `json:"username"`
 	Password string    `json:"password"`
 	Seller   bool      `json:"seller"`
+	Verified bool      `json:"verified"`
 }
 
 func buildCredentialRowResponse(Credential *entity.Credential) CredentialRowResponse {
@@ -39,6 +42,7 @@ func buildCredentialRowResponse(Credential *entity.Credential) CredentialRowResp
 		Username: Credential.Username,
 		Password: Credential.Password,
 		Seller:   Credential.Seller,
+		Verified: Credential.Verified,
 	}
 
 	return form
@@ -50,6 +54,7 @@ func buildCredentialDetailResponse(Credential *entity.Credential) CredentialDeta
 		Username: Credential.Username,
 		Password: Credential.Password,
 		Seller:   Credential.Seller,
+		Verified: Credential.Verified,
 	}
 
 	return form
@@ -107,6 +112,7 @@ func (handler *CredentialHandler) CreateCredential(echoCtx echo.Context) error {
 		form.Username,
 		form.Password,
 		form.Seller,
+		form.Verified,
 	)
 
 	if err := handler.service.Create(echoCtx.Request().Context(), CredentialEntity); err != nil {
@@ -116,6 +122,23 @@ func (handler *CredentialHandler) CreateCredential(echoCtx echo.Context) error {
 
 	var res = entity.NewResponse(nethttp.StatusCreated, "Request processed successfully.", CredentialEntity)
 	return echoCtx.JSON(res.Status, res)
+}
+
+func (handler *CredentialHandler) GetListCredential(echoCtx echo.Context) error {
+	var form QueryParamsCredential
+	if err := echoCtx.Bind(&form); err != nil {
+		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
+
+	Credential, err := handler.service.GetListCredential(echoCtx.Request().Context(), form.Limit, form.Offset)
+	if err != nil {
+		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
+	}
+	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Credential)
+	return echoCtx.JSON(res.Status, res)
+
 }
 
 // func GetCredentialdata() []CreateCredentialBodyRequest {

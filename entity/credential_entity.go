@@ -9,17 +9,19 @@ const (
 // CredentialModel is a model for entity.Credential
 type Credential struct {
 	Id       uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
-	Username string    `gorm:"type:varchar;not_null" json:"username"`
+	Username string    `gorm:"type:varchar;not_null;unique" json:"username"`
 	Password string    `gorm:"type:varchar;not_null" json:"password"`
 	Seller   bool      `gorm:"type:bool;default:false;not_null" json:"seller"`
+	Verified bool      `gorm:"type:bool;default:false;not_null" json:"verified"`
 }
 
-func NewCredential(id uuid.UUID, username, password string, seller bool) *Credential {
+func NewCredential(id uuid.UUID, username, password string, seller, verified bool) *Credential {
 	return &Credential{
 		Id:       id,
 		Username: username,
 		Password: password,
 		Seller:   seller,
+		Verified: verified,
 	}
 }
 func NewSeller(seller bool) *Credential {

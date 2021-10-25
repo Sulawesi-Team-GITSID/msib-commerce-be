@@ -7,3 +7,4 @@ repeat/
 main
 gcp-sa.json
 __debug_bin
+.env

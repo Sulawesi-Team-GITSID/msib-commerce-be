@@ -5,6 +5,7 @@ import (
 	"backend-service/service"
 	"net/http"
 	nethttp "net/http"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo"
@@ -18,7 +19,7 @@ type CreateProfileBodyRequest struct {
 	Last_name     string    `json:"last_name"`
 	Phone         string    `json:"phone"`
 	Gender        string    `json:"gender"`
-	Birthday      string    `json:"birthday"`
+	Birthday      time.Time `json:"birthday"`
 }
 
 // ProfileRowResponse defines all attributes needed to fulfill for Profile row entity.
@@ -29,7 +30,7 @@ type ProfileRowResponse struct {
 	Last_name     string    `json:"last_name"`
 	Phone         string    `json:"phone"`
 	Gender        string    `json:"gender"`
-	Birthday      string    `json:"birthday"`
+	Birthday      time.Time `json:"birthday"`
 }
 
 // ProfileResponse defines all attributes needed to fulfill for pic Profile entity.
@@ -40,7 +41,7 @@ type ProfileDetailResponse struct {
 	Last_name     string    `json:"last_name"`
 	Phone         string    `json:"phone"`
 	Gender        string    `json:"gender"`
-	Birthday      string    `json:"birthday"`
+	Birthday      time.Time `json:"birthday"`
 }
 
 func buildProfileRowResponse(Profile *entity.Profile) ProfileRowResponse {
