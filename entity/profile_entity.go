@@ -7,10 +7,10 @@ import (
 )
 
 const (
-	ProfileTableName = "credential"
+	ProfileTableName = "profile"
 )
 
-// ArticleModel is a model for entity.Article
+// ProfileModel is a model for entity.Profile
 type Profile struct {
 	Id            uuid.UUID   `gorm:"type:uuid;primary_key" json:"id"`
 	Credential_id uuid.UUID   `gorm:"type:uuid;not_null" json:"credential_id"`
@@ -34,7 +34,7 @@ func NewProfile(id, credential_id uuid.UUID, first_name, last_name, phone, gende
 	}
 }
 
-// TableName specifies table name for ArticleModel.
+// TableName specifies table name for ProfileModel.
 func (model *Profile) TableName() string {
 	return ProfileTableName
 }

@@ -6,7 +6,7 @@ const (
 	CredentialTableName = "credential"
 )
 
-// ArticleModel is a model for entity.Article
+// CredentialModel is a model for entity.Credential
 type Credential struct {
 	Id       uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
 	Username string    `gorm:"type:varchar;not_null" json:"username"`
@@ -28,7 +28,7 @@ func NewSeller(seller bool) *Credential {
 	}
 }
 
-// TableName specifies table name for ArticleModel.
+// TableName specifies table name for CredentialModel.
 func (model *Credential) TableName() string {
 	return CredentialTableName
 }
