@@ -3,6 +3,7 @@ package service
 import (
 	"backend-service/entity"
 	"context"
+	"strconv"
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
@@ -28,10 +29,12 @@ func NewCredentialService(CredentialRepo CredentialRepository) *CredentialServic
 
 type CredentialUseCase interface {
 	Create(ctx context.Context, Credential *entity.Credential) error
+	GetListCredential(ctx context.Context, limit, offset string) ([]*entity.Credential, error)
 }
 
 type CredentialRepository interface {
 	Insert(ctx context.Context, Credential *entity.Credential) error
+	GetListCredential(ctx context.Context, limit, offset string) ([]*entity.Credential, error)
 }
 
 func (svc CredentialService) Create(ctx context.Context, Credential *entity.Credential) error {
@@ -45,8 +48,24 @@ func (svc CredentialService) Create(ctx context.Context, Credential *entity.Cred
 		Credential.Id = uuid.New()
 	}
 
+	if val := strconv.FormatBool(Credential.Seller); val == "" {
+		Credential.Verified = false
+	}
+
+	if val := strconv.FormatBool(Credential.Verified); val == "" {
+		Credential.Verified = false
+	}
+
 	if err := svc.CredentialRepo.Insert(ctx, Credential); err != nil {
 		return errors.Wrap(err, "[CredentialService-Create]")
 	}
 	return nil
+}
+
+func (svc CredentialService) GetListCredential(ctx context.Context, limit, offset string) ([]*entity.Credential, error) {
+	Profile, err := svc.CredentialRepo.GetListCredential(ctx, limit, offset)
+	if err != nil {
+		return nil, errors.Wrap(err, "[CredentialService-GetList]")
+	}
+	return Profile, nil
 }

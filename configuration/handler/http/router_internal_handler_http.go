@@ -24,14 +24,15 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	engine.GET("/version", Version)
 
 	//Profile
-	engine.POST("/create-Profile", profileHandler.CreateProfile)
-	engine.GET("/list-Profile", profileHandler.GetListProfile)
-	engine.GET("/get-Profile/:id", profileHandler.GetDetailProfile)
-	engine.PUT("/update-Profile/:id", profileHandler.UpdateProfile)
-	engine.DELETE("/delete-Profile/:id", profileHandler.DeleteProfile)
+	engine.POST("/create-profile", profileHandler.CreateProfile)
+	engine.GET("/list-profile", profileHandler.GetListProfile)
+	engine.GET("/get-profile/:id", profileHandler.GetDetailProfile)
+	engine.PUT("/update-profile/:id", profileHandler.UpdateProfile)
+	engine.DELETE("/delete-profile/:id", profileHandler.DeleteProfile)
 
 	//User
 	engine.POST("/create-credential", credentialHandler.CreateCredential)
+	engine.GET("/list-credential", credentialHandler.GetListCredential)
 
 	return engine
 }

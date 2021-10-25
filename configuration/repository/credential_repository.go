@@ -31,3 +31,15 @@ func (repo *CredentialRepository) Insert(ctx context.Context, ent *entity.Creden
 	}
 	return nil
 }
+
+func (repo *CredentialRepository) GetListCredential(ctx context.Context, limit, offset string) ([]*entity.Credential, error) {
+	var models []*entity.Credential
+	if err := repo.db.
+		WithContext(ctx).
+		Model(&entity.Credential{}).
+		Find(&models).
+		Error; err != nil {
+		return nil, errors.Wrap(err, "[CredentialRepository-FindAll]")
+	}
+	return models, nil
+}
