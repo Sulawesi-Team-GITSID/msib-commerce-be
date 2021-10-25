@@ -39,7 +39,9 @@ func main() {
 	}()
 	// LoginHandler := &http.Loginhandler{}
 	CredentialHandler := buildCredentialHandler(db)
-	engine := http.NewGinEngine(CredentialHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+	ProfileHandler := buildProfileHandler(db)
+
+	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
 	server := &nethttp.Server{
 		Addr:    fmt.Sprintf(":%s", cfg.Port),
 		Handler: engine,
@@ -105,4 +107,10 @@ func buildCredentialHandler(db *gorm.DB) *http.CredentialHandler {
 	repo := repository.NewCredentialRepository(db)
 	CredentialService := service.NewCredentialService(repo)
 	return http.NewCredentialHandler(CredentialService)
+}
+
+func buildProfileHandler(db *gorm.DB) *http.ProfileHandler {
+	repo := repository.NewProfileRepository(db)
+	ProfileService := service.NewProfileService(repo)
+	return http.NewProfileHandler(ProfileService)
 }

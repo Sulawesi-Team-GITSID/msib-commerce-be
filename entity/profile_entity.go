@@ -1,8 +1,6 @@
 package entity
 
 import (
-	"time"
-
 	"github.com/google/uuid"
 )
 
@@ -18,11 +16,11 @@ type Profile struct {
 	Last_name     string      `gorm:"type:varchar;not_null" json:"last_name"`
 	Phone         string      `gorm:"type:varchar;not_null" json:"phone"`
 	Gender        string      `gorm:"type:varchar;not_null" json:"gender"`
-	Birthday      time.Time   `gorm:"type:date;not_null" json:"birthday"`
+	Birthday      string      `gorm:"type:date;not_null" json:"birthday"`
 	Credential    *Credential `gorm:"foreignKey:Credential_id"`
 }
 
-func NewProfile(id, credential_id uuid.UUID, first_name, last_name, phone, gender string, birthday time.Time) *Profile {
+func NewProfile(id, credential_id uuid.UUID, first_name, last_name, phone, gender, birthday string) *Profile {
 	return &Profile{
 		Id:            id,
 		Credential_id: credential_id,
