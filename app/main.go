@@ -40,8 +40,9 @@ func main() {
 	// LoginHandler := &http.Loginhandler{}
 	CredentialHandler := buildCredentialHandler(db)
 	ProfileHandler := buildProfileHandler(db)
+	usersHandler := buildUsersHandler(db)
 
-	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, usersHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
 	server := &nethttp.Server{
 		Addr:    fmt.Sprintf(":%s", cfg.Port),
 		Handler: engine,
@@ -113,4 +114,10 @@ func buildProfileHandler(db *gorm.DB) *http.ProfileHandler {
 	repo := repository.NewProfileRepository(db)
 	ProfileService := service.NewProfileService(repo)
 	return http.NewProfileHandler(ProfileService)
+}
+
+func buildUsersHandler(db *gorm.DB) *http.UsersHandler {
+	repo := repository.NewUsersRepository(db)
+	usersService := service.NewUsersService(repo)
+	return http.NewUsersHandler(usersService)
 }

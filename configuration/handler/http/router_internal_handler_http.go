@@ -6,7 +6,7 @@ import (
 
 // NewGinEngine creates an instance of echo.Engine.
 // gin.Engine already implements net/http.Handler interface.
-func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileHandler, internalUsername, internalPassword string) *echo.Echo {
+func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileHandler, usersHandler *UsersHandler, internalUsername, internalPassword string) *echo.Echo {
 
 	engine := echo.New()
 
@@ -22,6 +22,10 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	// engine.GET("/private", h.Private, IsLoggedIn)
 	// engine.GET("/admin", h.Private, IsLoggedIn, isAdmin)
 	engine.GET("/version", Version)
+
+	engine.POST("/login", usersHandler.Login)
+	engine.POST("/register", usersHandler.Register)
+	engine.GET("/get-user", usersHandler.GetProfile)
 
 	//Profile
 	engine.POST("/create-profile", profileHandler.CreateProfile)
