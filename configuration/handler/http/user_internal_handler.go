@@ -86,7 +86,7 @@ func NewUsersHandler(service service.UsersUseCase) *UsersHandler {
 
 // Create handles users creation.
 // It will reject the request if the request doesn't have required data,
-func (handler *UsersHandler) Login(echoCtx echo.Context) error {
+func (handler *UsersHandler) LoginUser(echoCtx echo.Context) error {
 	var form LoginBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
 		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
@@ -157,7 +157,7 @@ func (handler *UsersHandler) GetProfile(echoCtx echo.Context) error {
 
 	// get user from JWT
 	userClaim := echoCtx.Request().Header
-	log.Printf("Test : ", userClaim)
+	log.Print("Test : ", userClaim)
 
 	var res = entity.NewResponse(nethttp.StatusCreated, "Request processed successfully.", userClaim)
 	return echoCtx.JSON(res.Status, res)

@@ -51,7 +51,7 @@ func (svc UsersService) Register(ctx context.Context, users *entity.Users) error
 	return nil
 }
 
-func (svc UsersService) Login(ctx context.Context, email string, password string) (*entity.Users, error) {
+func (svc UsersService) LoginUser(ctx context.Context, email string, password string) (*entity.Users, error) {
 
 	userData, err := svc.usersRepo.Login(ctx, email, password)
 

@@ -26,8 +26,7 @@ func main() {
 
 	// tool.ErrorClient = setupErrorReporting(context.Background(), cfg)
 
-	var db *gorm.DB
-	db = config.OpenDatabase(cfg)
+	var db *gorm.DB = config.OpenDatabase(cfg)
 
 	defer func() {
 		if sqlDB, err := db.DB(); err != nil {
@@ -40,9 +39,9 @@ func main() {
 	// LoginHandler := &http.Loginhandler{}
 	CredentialHandler := buildCredentialHandler(db)
 	ProfileHandler := buildProfileHandler(db)
-	usersHandler := buildUsersHandler(db)
+	// usersHandler := buildUsersHandler(db)
 
-	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, usersHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
 	server := &nethttp.Server{
 		Addr:    fmt.Sprintf(":%s", cfg.Port),
 		Handler: engine,
@@ -116,8 +115,8 @@ func buildProfileHandler(db *gorm.DB) *http.ProfileHandler {
 	return http.NewProfileHandler(ProfileService)
 }
 
-func buildUsersHandler(db *gorm.DB) *http.UsersHandler {
-	repo := repository.NewUsersRepository(db)
-	usersService := service.NewUsersService(repo)
-	return http.NewUsersHandler(usersService)
-}
+// func buildUsersHandler(db *gorm.DB) *http.UsersHandler {
+// 	repo := repository.NewUsersRepository(db)
+// 	usersService := service.NewUsersService(repo)
+// 	return http.NewUsersHandler(usersService)
+// }

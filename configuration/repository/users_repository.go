@@ -28,7 +28,7 @@ func (repo *UsersRepository) Register(ctx context.Context, ent *entity.Users) er
 	return nil
 }
 
-func (repo *UsersRepository) Login(ctx context.Context, email string, password string) (*entity.Users, error) {
+func (repo *UsersRepository) LoginUser(ctx context.Context, email string, password string) (*entity.Users, error) {
 	var models *entity.Users
 	if err := repo.db.
 		WithContext(ctx).

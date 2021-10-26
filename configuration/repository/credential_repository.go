@@ -43,3 +43,17 @@ func (repo *CredentialRepository) GetListCredential(ctx context.Context, limit, 
 	}
 	return models, nil
 }
+
+func (repo *CredentialRepository) Login(ctx context.Context, email string, password string) (*entity.Credential, error) {
+	var models *entity.Credential
+	if err := repo.db.
+		WithContext(ctx).
+		Model(&entity.Credential{}).
+		Where(`email`, email).
+		Where(`password`, password).
+		First(&models).
+		Error; err != nil {
+		return nil, errors.Wrap(err, "[UsersRepository-Login]")
+	}
+	return models, nil
+}
