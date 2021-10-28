@@ -20,10 +20,10 @@ type RegisterBodyRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
-type LoginBodyRequest struct {
-	Email    string `json:"email" binding:"required"`
-	Password string `json:"password" binding:"required"`
-}
+// type LoginBodyRequest struct {
+// 	Email    string `json:"email" binding:"required"`
+// 	Password string `json:"password" binding:"required"`
+// }
 
 type UsersRowResponse struct {
 	ID    uuid.UUID `json:"id"`
@@ -45,17 +45,17 @@ type QueryParamsUsers struct {
 	Status string `form:"status"`
 }
 
-type JWTCustomClaims struct {
-	Nama  string    `json:"nama"`
-	Email string    `json:"email"`
-	Id    uuid.UUID `json:"id"`
-	jwt.StandardClaims
-}
+// type JWTCustomClaims struct {
+// 	Nama  string    `json:"nama"`
+// 	Email string    `json:"email"`
+// 	Id    uuid.UUID `json:"id"`
+// 	jwt.StandardClaims
+// }
 
-type Result struct {
-	Token string    `json:"token"`
-	Id    uuid.UUID `json:"id"`
-}
+// type Result struct {
+// 	Token string    `json:"token"`
+// 	Id    uuid.UUID `json:"id"`
+// }
 
 type MetaUsers struct {
 	Limit  int   `json:"limit"`

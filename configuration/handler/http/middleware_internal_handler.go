@@ -2,6 +2,7 @@ package http
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/labstack/echo"
 
@@ -10,7 +11,7 @@ import (
 )
 
 var IsLoggedIn = middleware.JWTWithConfig(middleware.JWTConfig{
-	SigningKey: []byte("secret"),
+	SigningKey: []byte(os.Getenv("JWT_SECRET_KEY")),
 })
 
 func isSeller(next echo.HandlerFunc) echo.HandlerFunc {
@@ -24,10 +25,9 @@ func isSeller(next echo.HandlerFunc) echo.HandlerFunc {
 		return next(c)
 	}
 }
-
 func (handler *CredentialHandler) Private(echoCtx echo.Context) error {
 	user := echoCtx.Get("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
-	name := claims["name"].(string)
+	name := claims["username"].(string)
 	return echoCtx.String(http.StatusOK, "Welcome "+name+"!")
 }

@@ -42,6 +42,23 @@ type CredentialDetailResponse struct {
 	Verified bool      `json:"verified"`
 }
 
+type LoginBodyRequest struct {
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
+type JWTCustomClaims struct {
+	Username string    `json:"username"`
+	Email    string    `json:"email"`
+	Id       uuid.UUID `json:"id"`
+	jwt.StandardClaims
+}
+
+type Result struct {
+	Token string    `json:"token"`
+	Id    uuid.UUID `json:"id"`
+}
+
 func buildCredentialRowResponse(Credential *entity.Credential) CredentialRowResponse {
 	form := CredentialRowResponse{
 		Id:       Credential.Id,
@@ -164,16 +181,21 @@ func (handler *CredentialHandler) Login(echoCtx echo.Context) error {
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
-	claims := &JWTCustomClaims{
-		userData.Username,
-		userData.Email,
-		userData.Id,
-		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
-		},
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	// claims := &JWTCustomClaims{
+	// 	userData.Username,
+	// 	userData.Email,
+	// 	userData.Id,
+	// 	jwt.StandardClaims{
+	// 		ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
+	// 	},
+	// }
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["username"] = userData.Username
+	claims["email"] = userData.Email
+	claims["id"] = userData.Id
+	claims["seller"] = userData.Seller
+	claims["exp"] = time.Now().Add(time.Minute * 45).Unix()
 
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET_KEY")))
 

@@ -36,9 +36,9 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 
 	//Credential
 	engine.POST("/create-credential", credentialHandler.CreateCredential)
-	engine.GET("/list-credential", credentialHandler.GetListCredential, IsLoggedIn, isSeller)
+	engine.GET("/list-credential", credentialHandler.GetListCredential, IsLoggedIn)
 	engine.POST("/login", credentialHandler.Login)
-	engine.GET("/private", credentialHandler.Private)
+	engine.GET("/private", credentialHandler.Private, IsLoggedIn)
 
 	return engine
 }
