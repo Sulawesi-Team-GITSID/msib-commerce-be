@@ -1,10 +1,2 @@
-# env
-.env
 
-k8s-deploy/
-repeat/
-.peru/
-main
-gcp-sa.json
-__debug_bin
 .env

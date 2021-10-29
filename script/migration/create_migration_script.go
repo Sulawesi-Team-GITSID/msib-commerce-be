@@ -44,6 +44,8 @@ func main() {
 	log.Info().Msg("  TableModel [" + (&entity.Profile{}).TableName() + "]")
 	db.AutoMigrate(&entity.Game{})
 	log.Info().Msg("  TableModel [" + (&entity.Game{}).TableName() + "]")
+	// db.AutoMigrate(&entity.Users{})
+	// log.Info().Msg("  TableModel [" + (&entity.Users{}).TableName() + "]")
 }
 
 func executePendingMigrations(db *gorm.DB) {

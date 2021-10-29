@@ -29,11 +29,13 @@ func NewCredentialService(CredentialRepo CredentialRepository) *CredentialServic
 
 type CredentialUseCase interface {
 	Create(ctx context.Context, Credential *entity.Credential) error
+	Login(ctx context.Context, email string, password string) (*entity.Credential, error)
 	GetListCredential(ctx context.Context, limit, offset string) ([]*entity.Credential, error)
 }
 
 type CredentialRepository interface {
 	Insert(ctx context.Context, Credential *entity.Credential) error
+	Login(ctx context.Context, email string, password string) (*entity.Credential, error)
 	GetListCredential(ctx context.Context, limit, offset string) ([]*entity.Credential, error)
 }
 
@@ -68,4 +70,15 @@ func (svc CredentialService) GetListCredential(ctx context.Context, limit, offse
 		return nil, errors.Wrap(err, "[CredentialService-GetList]")
 	}
 	return Profile, nil
+}
+
+func (svc CredentialService) Login(ctx context.Context, email string, password string) (*entity.Credential, error) {
+
+	CredentialData, err := svc.CredentialRepo.Login(ctx, email, password)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return CredentialData, nil
 }
