@@ -4,7 +4,10 @@ import (
 	"backend-service/entity"
 	"backend-service/service"
 	nethttp "net/http"
+	"os"
+	"time"
 
+	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
 	"github.com/labstack/echo"
 	_ "github.com/lib/pq"
@@ -13,6 +16,7 @@ import (
 // CreateCredentialBodyRequest defines all body attributes needed to add Credential.
 type CreateCredentialBodyRequest struct {
 	Username string `json:"username"`
+	Email    string `json:"email"`
 	Password string `json:"password"`
 	Seller   bool   `json:"seller"`
 	Verified bool   `json:"verified"`
@@ -22,6 +26,7 @@ type CreateCredentialBodyRequest struct {
 type CredentialRowResponse struct {
 	Id       uuid.UUID `json:"id"`
 	Username string    `json:"username"`
+	Email    string    `json:"email"`
 	Password string    `json:"password"`
 	Seller   bool      `json:"seller"`
 	Verified bool      `json:"verified"`
@@ -31,15 +36,35 @@ type CredentialRowResponse struct {
 type CredentialDetailResponse struct {
 	Id       uuid.UUID `json:"id"`
 	Username string    `json:"username"`
+	Email    string    `json:"email"`
 	Password string    `json:"password"`
 	Seller   bool      `json:"seller"`
 	Verified bool      `json:"verified"`
+}
+
+type LoginBodyRequest struct {
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
+type JWTCustomClaims struct {
+	Username string    `json:"username"`
+	Email    string    `json:"email"`
+	Id       uuid.UUID `json:"id"`
+	Seller   bool      `json:"seller"`
+	jwt.StandardClaims
+}
+
+type Result struct {
+	Token string    `json:"token"`
+	Id    uuid.UUID `json:"id"`
 }
 
 func buildCredentialRowResponse(Credential *entity.Credential) CredentialRowResponse {
 	form := CredentialRowResponse{
 		Id:       Credential.Id,
 		Username: Credential.Username,
+		Email:    Credential.Email,
 		Password: Credential.Password,
 		Seller:   Credential.Seller,
 		Verified: Credential.Verified,
@@ -52,6 +77,7 @@ func buildCredentialDetailResponse(Credential *entity.Credential) CredentialDeta
 	form := CredentialDetailResponse{
 		Id:       Credential.Id,
 		Username: Credential.Username,
+		Email:    Credential.Email,
 		Password: Credential.Password,
 		Seller:   Credential.Seller,
 		Verified: Credential.Verified,
@@ -110,6 +136,7 @@ func (handler *CredentialHandler) CreateCredential(echoCtx echo.Context) error {
 	CredentialEntity := entity.NewCredential(
 		uuid.Nil,
 		form.Username,
+		form.Email,
 		form.Password,
 		form.Seller,
 		form.Verified,
@@ -139,6 +166,53 @@ func (handler *CredentialHandler) GetListCredential(echoCtx echo.Context) error 
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Credential)
 	return echoCtx.JSON(res.Status, res)
 
+}
+
+func (handler *CredentialHandler) Login(echoCtx echo.Context) error {
+	var form LoginBodyRequest
+	if err := echoCtx.Bind(&form); err != nil {
+		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+
+	}
+
+	userData, err := handler.service.Login(echoCtx.Request().Context(), form.Email, form.Password)
+	if err != nil {
+		errorResponse := buildErrorResponse(err, entity.ErrInvalidCredential)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
+
+	claims := &JWTCustomClaims{
+		userData.Username,
+		userData.Email,
+		userData.Id,
+		userData.Seller,
+		jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	// claims := token.Claims.(jwt.MapClaims)
+	// claims["username"] = userData.Username
+	// claims["email"] = userData.Email
+	// claims["id"] = userData.Id
+	// claims["seller"] = userData.Seller
+	// claims["exp"] = time.Now().Add(time.Minute * 45).Unix()
+
+	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET_KEY")))
+
+	if err != nil {
+		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
+	}
+
+	result := &Result{
+		tokenString,
+		userData.Id,
+	}
+
+	var res = entity.NewResponse(nethttp.StatusCreated, "Request processed successfully.", result)
+	return echoCtx.JSON(res.Status, res)
 }
 
 // func GetCredentialdata() []CreateCredentialBodyRequest {

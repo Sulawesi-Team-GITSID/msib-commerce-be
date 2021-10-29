@@ -10,15 +10,17 @@ const (
 type Credential struct {
 	Id       uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
 	Username string    `gorm:"type:varchar;not_null;unique" json:"username"`
+	Email    string    `gorm:"type:varchar;not null;unique" json:"email"`
 	Password string    `gorm:"type:varchar;not_null" json:"password"`
 	Seller   bool      `gorm:"type:bool;default:false;not_null" json:"seller"`
 	Verified bool      `gorm:"type:bool;default:false;not_null" json:"verified"`
 }
 
-func NewCredential(id uuid.UUID, username, password string, seller, verified bool) *Credential {
+func NewCredential(id uuid.UUID, username, email, password string, seller, verified bool) *Credential {
 	return &Credential{
 		Id:       id,
 		Username: username,
+		Email:    email,
 		Password: password,
 		Seller:   seller,
 		Verified: verified,
