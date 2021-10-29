@@ -39,10 +39,10 @@ func main() {
 	// LoginHandler := &http.Loginhandler{}
 	CredentialHandler := buildCredentialHandler(db)
 	ProfileHandler := buildProfileHandler(db)
-	JWThandler := &http.JWThandler{}
+  GameHandler := buildGameHandler(db)
+  JWThandler := &http.JWThandler{}
 	// usersHandler := buildUsersHandler(db)
-
-	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, JWThandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, GameHandler, JWThandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
 	server := &nethttp.Server{
 		Addr:    fmt.Sprintf(":%s", cfg.Port),
 		Handler: engine,
@@ -115,7 +115,11 @@ func buildProfileHandler(db *gorm.DB) *http.ProfileHandler {
 	ProfileService := service.NewProfileService(repo)
 	return http.NewProfileHandler(ProfileService)
 }
-
+func buildGameHandler(db *gorm.DB) *http.GameHandler {
+	repo := repository.NewGameRepository(db)
+	GameService := service.NewGameService(repo)
+	return http.NewGameHandler(GameService)
+}
 // func buildUsersHandler(db *gorm.DB) *http.UsersHandler {
 // 	repo := repository.NewUsersRepository(db)
 // 	usersService := service.NewUsersService(repo)
