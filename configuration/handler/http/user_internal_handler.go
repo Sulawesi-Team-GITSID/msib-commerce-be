@@ -5,10 +5,6 @@ import (
 	"backend-service/service"
 	"log"
 	nethttp "net/http"
-	"os"
-	"time"
-
-	"github.com/golang-jwt/jwt"
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo"
@@ -86,46 +82,46 @@ func NewUsersHandler(service service.UsersUseCase) *UsersHandler {
 
 // Create handles users creation.
 // It will reject the request if the request doesn't have required data,
-func (handler *UsersHandler) LoginUser(echoCtx echo.Context) error {
-	var form LoginBodyRequest
-	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
-		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+// func (handler *UsersHandler) LoginUser(echoCtx echo.Context) error {
+// 	var form LoginBodyRequest
+// 	if err := echoCtx.Bind(&form); err != nil {
+// 		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+// 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 
-	}
+// 	}
 
-	userData, err := handler.service.Login(echoCtx.Request().Context(), form.Email, form.Password)
-	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidCredential)
-		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
-	}
+// 	userData, err := handler.service.Login(echoCtx.Request().Context(), form.Email, form.Password)
+// 	if err != nil {
+// 		errorResponse := buildErrorResponse(err, entity.ErrInvalidCredential)
+// 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+// 	}
 
-	claims := &JWTCustomClaims{
-		userData.Nama,
-		userData.Email,
-		userData.ID,
-		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
-		},
-	}
+// 	claims := &JWTCustomClaims{
+// 		userData.Nama,
+// 		userData.Email,
+// 		userData.ID,
+// 		jwt.StandardClaims{
+// 			ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
+// 		},
+// 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+// 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET_KEY")))
+// 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET_KEY")))
 
-	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
-		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
-	}
+// 	if err != nil {
+// 		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+// 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
+// 	}
 
-	result := &Result{
-		tokenString,
-		userData.ID,
-	}
+// 	result := &Result{
+// 		tokenString,
+// 		userData.ID,
+// 	}
 
-	var res = entity.NewResponse(nethttp.StatusCreated, "Request processed successfully.", result)
-	return echoCtx.JSON(res.Status, res)
-}
+// 	var res = entity.NewResponse(nethttp.StatusCreated, "Request processed successfully.", result)
+// 	return echoCtx.JSON(res.Status, res)
+// }
 
 // Create handles users creation.
 // It will reject the request if the request doesn't have required data,

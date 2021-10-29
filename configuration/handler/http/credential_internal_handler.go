@@ -51,6 +51,7 @@ type JWTCustomClaims struct {
 	Username string    `json:"username"`
 	Email    string    `json:"email"`
 	Id       uuid.UUID `json:"id"`
+	Seller   bool      `json:"seller"`
 	jwt.StandardClaims
 }
 
@@ -181,21 +182,22 @@ func (handler *CredentialHandler) Login(echoCtx echo.Context) error {
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
-	// claims := &JWTCustomClaims{
-	// 	userData.Username,
-	// 	userData.Email,
-	// 	userData.Id,
-	// 	jwt.StandardClaims{
-	// 		ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
-	// 	},
-	// }
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
-	claims["username"] = userData.Username
-	claims["email"] = userData.Email
-	claims["id"] = userData.Id
-	claims["seller"] = userData.Seller
-	claims["exp"] = time.Now().Add(time.Minute * 45).Unix()
+	claims := &JWTCustomClaims{
+		userData.Username,
+		userData.Email,
+		userData.Id,
+		userData.Seller,
+		jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	// claims := token.Claims.(jwt.MapClaims)
+	// claims["username"] = userData.Username
+	// claims["email"] = userData.Email
+	// claims["id"] = userData.Id
+	// claims["seller"] = userData.Seller
+	// claims["exp"] = time.Now().Add(time.Minute * 45).Unix()
 
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET_KEY")))
 

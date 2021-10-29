@@ -2,7 +2,6 @@ package http
 
 import (
 	"net/http"
-	"os"
 
 	"github.com/labstack/echo"
 
@@ -10,8 +9,11 @@ import (
 	"github.com/labstack/echo/middleware"
 )
 
+type JWThandler struct{}
+
 var IsLoggedIn = middleware.JWTWithConfig(middleware.JWTConfig{
-	SigningKey: []byte(os.Getenv("JWT_SECRET_KEY")),
+	// SigningKey: []byte(os.Getenv("JWT_SECRET_KEY")),
+	SigningKey: []byte("rahasia"),
 })
 
 func isSeller(next echo.HandlerFunc) echo.HandlerFunc {
@@ -25,7 +27,7 @@ func isSeller(next echo.HandlerFunc) echo.HandlerFunc {
 		return next(c)
 	}
 }
-func (handler *CredentialHandler) Private(echoCtx echo.Context) error {
+func (handler *JWThandler) Private(echoCtx echo.Context) error {
 	user := echoCtx.Get("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	name := claims["username"].(string)

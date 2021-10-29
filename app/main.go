@@ -39,9 +39,10 @@ func main() {
 	// LoginHandler := &http.Loginhandler{}
 	CredentialHandler := buildCredentialHandler(db)
 	ProfileHandler := buildProfileHandler(db)
+	JWThandler := &http.JWThandler{}
 	// usersHandler := buildUsersHandler(db)
 
-	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, JWThandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
 	server := &nethttp.Server{
 		Addr:    fmt.Sprintf(":%s", cfg.Port),
 		Handler: engine,
