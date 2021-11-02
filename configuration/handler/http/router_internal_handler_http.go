@@ -28,7 +28,7 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 
 	//Profile
 	engine.POST("/create-profile", profileHandler.CreateProfile)
-	engine.GET("/list-profile", profileHandler.GetListProfile)
+	engine.GET("/list-profile", profileHandler.GetListProfile, IsLoggedIn, isSeller)
 	engine.GET("/get-profile/:id", profileHandler.GetDetailProfile)
 	engine.PUT("/update-profile/:id", profileHandler.UpdateProfile)
 	engine.DELETE("/delete-profile/:id", profileHandler.DeleteProfile)
@@ -37,7 +37,7 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	engine.POST("/create-credential", credentialHandler.CreateCredential)
 	engine.GET("/list-credential", credentialHandler.GetListCredential, IsLoggedIn)
 	engine.POST("/login", credentialHandler.Login)
-	engine.GET("/private", JWThandler.Private)
+	// engine.GET("/private", JWThandler.Private)
 
 	//Game
 	engine.POST("/create-game", gameHandler.CreateGame)
