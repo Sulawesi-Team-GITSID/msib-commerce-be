@@ -20,7 +20,7 @@ func main() {
 	config, err := config.NewConfig(".env")
 	checkError(err)
 
-	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=require",
 		config.Database.Host,
 		config.Database.Port,
 		config.Database.Username,
@@ -44,6 +44,8 @@ func main() {
 	log.Info().Msg("  TableModel [" + (&entity.Profile{}).TableName() + "]")
 	db.AutoMigrate(&entity.Game{})
 	log.Info().Msg("  TableModel [" + (&entity.Game{}).TableName() + "]")
+	db.AutoMigrate(&entity.Voucher{})
+	log.Info().Msg("  TableModel [" + (&entity.Voucher{}).TableName() + "]")
 	// db.AutoMigrate(&entity.Users{})
 	// log.Info().Msg("  TableModel [" + (&entity.Users{}).TableName() + "]")
 }

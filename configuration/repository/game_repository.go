@@ -46,6 +46,19 @@ func (repo *GameRepository) GetListGame(ctx context.Context, limit, offset strin
 	return models, nil
 }
 
+func (repo *GameRepository) GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Genre, error) {
+	var models []*entity.Genre
+	if err := repo.db.
+		WithContext(ctx).
+		Model(&entity.Game{}).
+		Distinct("genre").Order("genre asc").
+		Find(&models).
+		Error; err != nil {
+		return nil, errors.Wrap(err, "[GameRepository-FindGenre]")
+	}
+	return models, nil
+}
+
 func (repo *GameRepository) GetDetailGame(ctx context.Context, ID uuid.UUID) (*entity.Game, error) {
 	var models *entity.Game
 	if err := repo.db.

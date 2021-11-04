@@ -29,6 +29,7 @@ func NewGameService(GameRepo GameRepository) *GameService {
 type GameUseCase interface {
 	Create(ctx context.Context, Game *entity.Game) error
 	GetListGame(ctx context.Context, limit, offset string) ([]*entity.Game, error)
+	GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Genre, error)
 	GetDetailGame(ctx context.Context, ID uuid.UUID) (*entity.Game, error)
 	UpdateGame(ctx context.Context, Game *entity.Game) error
 	DeleteGame(ctx context.Context, ID uuid.UUID) error
@@ -37,6 +38,7 @@ type GameUseCase interface {
 type GameRepository interface {
 	Insert(ctx context.Context, Game *entity.Game) error
 	GetListGame(ctx context.Context, limit, offset string) ([]*entity.Game, error)
+	GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Genre, error)
 	GetDetailGame(ctx context.Context, ID uuid.UUID) (*entity.Game, error)
 	UpdateGame(ctx context.Context, Game *entity.Game) error
 	DeleteGame(ctx context.Context, ID uuid.UUID) error
@@ -62,7 +64,15 @@ func (svc GameService) Create(ctx context.Context, Game *entity.Game) error {
 func (svc GameService) GetListGame(ctx context.Context, limit, offset string) ([]*entity.Game, error) {
 	Game, err := svc.GameRepo.GetListGame(ctx, limit, offset)
 	if err != nil {
-		return nil, errors.Wrap(err, "[GameService-Create]")
+		return nil, errors.Wrap(err, "[GameService-GetListGame]")
+	}
+	return Game, nil
+}
+
+func (svc GameService) GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Genre, error) {
+	Game, err := svc.GameRepo.GetListGenre(ctx, limit, offset)
+	if err != nil {
+		return nil, errors.Wrap(err, "[GameService-GetListGenre]")
 	}
 	return Game, nil
 }
@@ -70,7 +80,7 @@ func (svc GameService) GetListGame(ctx context.Context, limit, offset string) ([
 func (svc GameService) GetDetailGame(ctx context.Context, ID uuid.UUID) (*entity.Game, error) {
 	Game, err := svc.GameRepo.GetDetailGame(ctx, ID)
 	if err != nil {
-		return nil, errors.Wrap(err, "[GameService-Create]")
+		return nil, errors.Wrap(err, "[GameService-GetDetailGame]")
 	}
 	return Game, nil
 }
@@ -78,7 +88,7 @@ func (svc GameService) GetDetailGame(ctx context.Context, ID uuid.UUID) (*entity
 func (svc GameService) DeleteGame(ctx context.Context, ID uuid.UUID) error {
 	err := svc.GameRepo.DeleteGame(ctx, ID)
 	if err != nil {
-		return errors.Wrap(err, "[GameService-Create]")
+		return errors.Wrap(err, "[GameService-DeleteGame]")
 	}
 	return nil
 }
@@ -95,7 +105,7 @@ func (svc GameService) UpdateGame(ctx context.Context, Game *entity.Game) error 
 	}
 
 	if err := svc.GameRepo.UpdateGame(ctx, Game); err != nil {
-		return errors.Wrap(err, "[GameService-Create]")
+		return errors.Wrap(err, "[GameService-UpdateGame]")
 	}
 	return nil
 }

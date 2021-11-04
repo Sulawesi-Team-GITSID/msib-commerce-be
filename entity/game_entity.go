@@ -14,6 +14,10 @@ type Game struct {
 	Genre    string    `gorm:"type:varchar;default:false;not_null" json:"genre"`
 }
 
+type Genre struct {
+	Genre string `gorm:"type:varchar;default:false;not_null" json:"genre"`
+}
+
 func NewGame(id uuid.UUID, nama_game string, harga int, genre string) *Game {
 	return &Game{
 		Id:       id,
