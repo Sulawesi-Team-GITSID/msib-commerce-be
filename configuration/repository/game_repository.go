@@ -46,8 +46,8 @@ func (repo *GameRepository) GetListGame(ctx context.Context, limit, offset strin
 	return models, nil
 }
 
-func (repo *GameRepository) GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Game, error) {
-	var models []*entity.Game
+func (repo *GameRepository) GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Genre, error) {
+	var models []*entity.Genre
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Game{}).

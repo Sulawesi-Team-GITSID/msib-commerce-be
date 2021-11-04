@@ -20,7 +20,7 @@ func main() {
 	config, err := config.NewConfig(".env")
 	checkError(err)
 
-	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=require",
 		config.Database.Host,
 		config.Database.Port,
 		config.Database.Username,
