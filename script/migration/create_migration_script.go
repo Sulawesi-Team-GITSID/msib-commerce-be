@@ -50,6 +50,8 @@ func main() {
 	log.Info().Msg("  TableModel [" + (&entity.GiftCard{}).TableName() + "]")
 	db.AutoMigrate(&entity.Review{})
 	log.Info().Msg("  TableModel [" + (&entity.Review{}).TableName() + "]")
+
+	db.Model(&entity.Review{}).Select("*").Joins("left join game on review.game_id = game.id").Scan(&entity.Review{})
 	// db.AutoMigrate(&entity.Users{})
 	// log.Info().Msg("  TableModel [" + (&entity.Users{}).TableName() + "]")
 }
