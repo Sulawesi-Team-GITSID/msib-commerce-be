@@ -1,1 +1,1 @@
-web : bin/backend-service
+web : bin/app
