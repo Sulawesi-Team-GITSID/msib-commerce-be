@@ -41,9 +41,9 @@ func main() {
 	ProfileHandler := buildProfileHandler(db)
 	GameHandler := buildGameHandler(db)
 	VoucherHandler := buildVoucherHandler(db)
-	JWThandler := &http.JWThandler{}
+	Middlewarehandler := &http.Middlewarehandler{}
 	// usersHandler := buildUsersHandler(db)
-	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, GameHandler, VoucherHandler, JWThandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, GameHandler, VoucherHandler, Middlewarehandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
 	server := &nethttp.Server{
 		Addr:    fmt.Sprintf(":%s", cfg.Port),
 		Handler: engine,
