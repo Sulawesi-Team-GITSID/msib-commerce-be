@@ -82,7 +82,7 @@ func (svc GameService) GetListGenre(ctx context.Context, limit, offset string) (
 func (svc GameService) GetListTrendGame(ctx context.Context, limit, offset string) ([]*entity.TrendGame, error) {
 	Game, err := svc.GameRepo.GetListTrendGame(ctx, limit, offset)
 	if err != nil {
-		return nil, errors.Wrap(err, "[GameService-GetListGenre]")
+		return nil, errors.Wrap(err, "[GameService-GetListTrendGame]")
 	}
 	return Game, nil
 }
