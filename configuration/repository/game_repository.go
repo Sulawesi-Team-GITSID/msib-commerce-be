@@ -64,7 +64,7 @@ func (repo *GameRepository) GetListTrendGame(ctx context.Context, limit, offset 
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Game{}).
-		Select("game.id", "nama_game", "harga", "review.rating").
+		Select("game.id", "nama_game", "harga", "avg(rating) as rating").Group("game.id").
 		Joins("inner join review on review.game_id = game.id").Order("rating desc").
 		Find(&models).
 		Error; err != nil {
