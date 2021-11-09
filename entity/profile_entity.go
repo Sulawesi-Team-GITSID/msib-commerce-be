@@ -38,7 +38,3 @@ func NewProfile(id, credential_id uuid.UUID, first_name, last_name, phone, gende
 func (model *Profile) TableName() string {
 	return ProfileTableName
 }
-
-// func (tv *TV) GenerateSlug() string {
-// 	return html.EscapeString(strings.ToLower(strings.ReplaceAll(tv.title, " ", "-")))
-// }

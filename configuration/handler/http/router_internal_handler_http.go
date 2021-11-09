@@ -6,7 +6,7 @@ import (
 
 // NewGinEngine creates an instance of echo.Engine.
 // gin.Engine already implements net/http.Handler interface.
-func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileHandler, gameHandler *GameHandler, voucherHandler *VoucherHandler, Middlewarehandler *Middlewarehandler, internalUsername, internalPassword string) *echo.Echo {
+func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileHandler, gameHandler *GameHandler, voucherHandler *VoucherHandler, verificationHandler *VerificationHandler, Middlewarehandler *Middlewarehandler, internalUsername, internalPassword string) *echo.Echo {
 	engine := echo.New()
 
 	// CORS
@@ -53,6 +53,13 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	engine.GET("/get-voucher/:id", voucherHandler.GetDetailVoucher)
 	engine.PUT("/update-voucher/:id", voucherHandler.UpdateVoucher)
 	engine.DELETE("/delete-voucher/:id", voucherHandler.DeleteVoucher)
+
+	//Verification
+	engine.POST("/create-verification", verificationHandler.CreateVerification)
+	engine.GET("/list-verification", verificationHandler.GetListVerification)
+	engine.GET("/get-verification/:id", verificationHandler.GetDetailVerification)
+	engine.PUT("/update-verification/:id", verificationHandler.UpdateVerification)
+	engine.DELETE("/delete-verification/:id", verificationHandler.DeleteVerification)
 
 	return engine
 }
