@@ -6,7 +6,8 @@ import (
 
 // NewGinEngine creates an instance of echo.Engine.
 // gin.Engine already implements net/http.Handler interface.
-func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileHandler, gameHandler *GameHandler, voucherHandler *VoucherHandler, verificationHandler *VerificationHandler, Middlewarehandler *Middlewarehandler, internalUsername, internalPassword string) *echo.Echo {
+func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileHandler, gameHandler *GameHandler, voucherHandler *VoucherHandler, verificationHandler *VerificationHandler, Middlewarehandler *Middlewarehandler, reviewHandler *ReviewHandler, internalUsername, internalPassword string) *echo.Echo {
+
 	engine := echo.New()
 
 	// CORS
@@ -43,6 +44,7 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	engine.POST("/create-game", gameHandler.CreateGame)
 	engine.GET("/list-game", gameHandler.GetListGame)
 	engine.GET("/list-genre", gameHandler.GetListGenre)
+	engine.GET("/list-trend-game", gameHandler.GetListTrendGame)
 	engine.GET("/get-game/:id", gameHandler.GetDetailGame)
 	engine.PUT("/update-game/:id", gameHandler.UpdateGame)
 	engine.DELETE("/delete-game/:id", gameHandler.DeleteGame)
@@ -60,6 +62,10 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	engine.GET("/get-verification/:id", verificationHandler.GetDetailVerification)
 	engine.PUT("/update-verification/:id", verificationHandler.UpdateVerification)
 	engine.DELETE("/delete-verification/:id", verificationHandler.DeleteVerification)
+
+	//Review
+	engine.POST("/create-review", reviewHandler.CreateReview)
+	engine.GET("/list-review", reviewHandler.GetListReview)
 
 	return engine
 }

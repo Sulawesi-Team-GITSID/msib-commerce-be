@@ -49,6 +49,10 @@ func main() {
 	log.Info().Msg("  TableModel [" + (&entity.Voucher{}).TableName() + "]")
 	db.AutoMigrate(&entity.Verification{})
 	log.Info().Msg("  TableModel [" + (&entity.Verification{}).TableName() + "]")
+	db.AutoMigrate(&entity.GiftCard{})
+	log.Info().Msg("  TableModel [" + (&entity.GiftCard{}).TableName() + "]")
+	db.AutoMigrate(&entity.Review{})
+	log.Info().Msg("  TableModel [" + (&entity.Review{}).TableName() + "]")
 	// db.AutoMigrate(&entity.Users{})
 	// log.Info().Msg("  TableModel [" + (&entity.Users{}).TableName() + "]")
 }

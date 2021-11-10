@@ -18,6 +18,13 @@ type Genre struct {
 	Genre string `gorm:"type:varchar;default:false;not_null" json:"genre"`
 }
 
+type TrendGame struct {
+	Id       uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
+	NamaGame string    `gorm:"type:varchar;not_null" json:"nama_game"`
+	Harga    int       `gorm:"type:int;not_null" json:"harga"`
+	Rating   float64   `gorm:"type:numeric;not_null" json:"rating"`
+}
+
 func NewGame(id uuid.UUID, nama_game string, harga int, genre string) *Game {
 	return &Game{
 		Id:       id,
