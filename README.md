@@ -1,3 +1,4 @@
+@@ -1,30 +0,0 @@
 # Simple CRUD API Golang Postgres
 
 CRUD API Golang with postgresql

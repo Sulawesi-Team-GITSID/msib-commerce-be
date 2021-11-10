@@ -58,6 +58,7 @@ func NewConfig(env string) (*Config, error) {
 
 func OpenDatabase(config *Config) *gorm.DB {
 	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=require",
+		// dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		config.Database.Host,
 		config.Database.Port,
 		config.Database.Username,
