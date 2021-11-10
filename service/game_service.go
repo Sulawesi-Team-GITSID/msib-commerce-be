@@ -30,6 +30,7 @@ type GameUseCase interface {
 	Create(ctx context.Context, Game *entity.Game) error
 	GetListGame(ctx context.Context, limit, offset string) ([]*entity.Game, error)
 	GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Genre, error)
+	GetListTrendGame(ctx context.Context, limit, offset string) ([]*entity.TrendGame, error)
 	GetDetailGame(ctx context.Context, ID uuid.UUID) (*entity.Game, error)
 	UpdateGame(ctx context.Context, Game *entity.Game) error
 	DeleteGame(ctx context.Context, ID uuid.UUID) error
@@ -39,6 +40,7 @@ type GameRepository interface {
 	Insert(ctx context.Context, Game *entity.Game) error
 	GetListGame(ctx context.Context, limit, offset string) ([]*entity.Game, error)
 	GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Genre, error)
+	GetListTrendGame(ctx context.Context, limit, offset string) ([]*entity.TrendGame, error)
 	GetDetailGame(ctx context.Context, ID uuid.UUID) (*entity.Game, error)
 	UpdateGame(ctx context.Context, Game *entity.Game) error
 	DeleteGame(ctx context.Context, ID uuid.UUID) error
@@ -73,6 +75,14 @@ func (svc GameService) GetListGenre(ctx context.Context, limit, offset string) (
 	Game, err := svc.GameRepo.GetListGenre(ctx, limit, offset)
 	if err != nil {
 		return nil, errors.Wrap(err, "[GameService-GetListGenre]")
+	}
+	return Game, nil
+}
+
+func (svc GameService) GetListTrendGame(ctx context.Context, limit, offset string) ([]*entity.TrendGame, error) {
+	Game, err := svc.GameRepo.GetListTrendGame(ctx, limit, offset)
+	if err != nil {
+		return nil, errors.Wrap(err, "[GameService-GetListTrendGame]")
 	}
 	return Game, nil
 }

@@ -153,6 +153,23 @@ func (handler *GameHandler) GetListGenre(echoCtx echo.Context) error {
 
 }
 
+func (handler *GameHandler) GetListTrendGame(echoCtx echo.Context) error {
+	var form QueryParamsGame
+	if err := echoCtx.Bind(&form); err != nil {
+		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
+
+	Game, err := handler.service.GetListTrendGame(echoCtx.Request().Context(), form.Limit, form.Offset)
+	if err != nil {
+		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
+	}
+	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Game)
+	return echoCtx.JSON(res.Status, res)
+
+}
+
 func (handler *GameHandler) GetDetailGame(echoCtx echo.Context) error {
 	idParam := echoCtx.Param("id")
 	if len(idParam) == 0 {

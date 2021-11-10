@@ -59,6 +59,20 @@ func (repo *GameRepository) GetListGenre(ctx context.Context, limit, offset stri
 	return models, nil
 }
 
+func (repo *GameRepository) GetListTrendGame(ctx context.Context, limit, offset string) ([]*entity.TrendGame, error) {
+	var models []*entity.TrendGame
+	if err := repo.db.
+		WithContext(ctx).
+		Model(&entity.Game{}).
+		Select("game.id", "nama_game", "harga", "avg(rating) as rating").Group("game.id").
+		Joins("inner join review on review.game_id = game.id").Order("rating desc").
+		Find(&models).
+		Error; err != nil {
+		return nil, errors.Wrap(err, "[GameRepository-FindTrendGame]")
+	}
+	return models, nil
+}
+
 func (repo *GameRepository) GetDetailGame(ctx context.Context, ID uuid.UUID) (*entity.Game, error) {
 	var models *entity.Game
 	if err := repo.db.
