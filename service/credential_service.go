@@ -51,7 +51,7 @@ func (svc CredentialService) Create(ctx context.Context, Credential *entity.Cred
 	}
 
 	if val := strconv.FormatBool(Credential.Seller); val == "" {
-		Credential.Verified = false
+		Credential.Seller = false
 	}
 
 	if val := strconv.FormatBool(Credential.Verified); val == "" {

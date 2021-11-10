@@ -148,6 +148,7 @@ func (handler *CredentialHandler) CreateCredential(echoCtx echo.Context) error {
 	}
 
 	var res = entity.NewResponse(nethttp.StatusCreated, "Request processed successfully.", CredentialEntity)
+	Sendmail(form)
 	return echoCtx.JSON(res.Status, res)
 }
 
