@@ -41,3 +41,7 @@ func Sendmail(form CreateCredentialBodyRequest) {
 
 	log.Println("Mail sent!")
 }
+
+func verify_mail() {
+
+}
