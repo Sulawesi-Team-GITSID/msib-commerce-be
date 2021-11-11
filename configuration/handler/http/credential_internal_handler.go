@@ -132,9 +132,9 @@ func (handler *CredentialHandler) CreateCredential(echoCtx echo.Context) error {
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 
 	}
-
+	uuidsaver := uuid.New()
 	CredentialEntity := entity.NewCredential(
-		uuid.Nil,
+		uuidsaver,
 		form.Username,
 		form.Email,
 		form.Password,
@@ -215,44 +215,3 @@ func (handler *CredentialHandler) Login(echoCtx echo.Context) error {
 	var res = entity.NewResponse(nethttp.StatusCreated, "Request processed successfully.", result)
 	return echoCtx.JSON(res.Status, res)
 }
-
-// func GetCredentialdata() []CreateCredentialBodyRequest {
-// 	db := config.CreateConnection()
-
-// 	// kita tutup koneksinya di akhir proses
-// 	defer db.Close()
-
-// 	var Credentials []CreateCredentialBodyRequest
-
-// 	// kita buat select query
-// 	sqlStatement := `SELECT Username, password, Seller FROM public."Credential"`
-
-// 	// mengeksekusi sql query
-// 	rows, err := db.Query(sqlStatement)
-
-// 	if err != nil {
-// 		log.Fatalf("Query could not be executed. %v", err)
-// 	}
-
-// 	// kita tutup eksekusi proses sql qeurynya
-// 	defer rows.Close()
-
-// 	// kita iterasi mengambil datanya
-// 	for rows.Next() {
-// 		var Credential CreateCredentialBodyRequest
-
-// 		// kita ambil datanya dan unmarshal ke structnya
-// 		err = rows.Scan(&Credential.Username, &Credential.Password, &Credential.Seller)
-
-// 		if err != nil {
-// 			log.Fatalf("No data. %v", err)
-// 		}
-
-// 		// masukkan kedalam slice bukus
-// 		Credentials = append(Credentials, Credential)
-
-// 	}
-
-// 	// return empty buku atau jika error
-// 	return Credentials
-// }

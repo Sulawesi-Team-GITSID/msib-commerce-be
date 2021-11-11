@@ -42,6 +42,28 @@ func Sendmail(form CreateCredentialBodyRequest) {
 	log.Println("Mail sent!")
 }
 
-func verify_mail() {
+func verify_mail(form VerifyResult) {
+	var link string
+	mailer := gomail.NewMessage()
+	mailer.SetHeader("From", CONFIG_SENDER_NAME)
+	mailer.SetHeader("To", form.Email, "voucherlabs.official@gmail.com")
+	mailer.SetAddressHeader("Cc", "voucherlabs.official@gmail.com", "Tra Lala La")
+	mailer.SetHeader("Subject", "Code Verification")
+	link = "http://localhost:8080/status"
+	mailer.SetBody("text/html", "Here's your verification code, click link<br>"+form.Code+link)
 
+	dialer := gomail.NewDialer(
+		CONFIG_SMTP_HOST,
+		CONFIG_SMTP_PORT,
+		CONFIG_AUTH_EMAIL,
+		CONFIG_AUTH_PASSWORD,
+	)
+
+	err := dialer.DialAndSend(mailer)
+	if err != nil {
+		log.Print(dialer)
+		log.Fatal(err.Error())
+	}
+
+	log.Println("Mail sent!")
 }

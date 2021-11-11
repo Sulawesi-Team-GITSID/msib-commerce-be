@@ -28,6 +28,7 @@ func NewVerificationService(VerificationRepo VerificationRepository) *Verificati
 
 type VerificationUseCase interface {
 	Create(ctx context.Context, Verification *entity.Verification) error
+	Verify(ctx context.Context, credential_id string) (*entity.Getcode, error)
 	GetListVerification(ctx context.Context, limit, offset string) ([]*entity.Verification, error)
 	GetDetailVerification(ctx context.Context, ID uuid.UUID) (*entity.Verification, error)
 	UpdateVerification(ctx context.Context, Verification *entity.Verification) error
@@ -36,6 +37,7 @@ type VerificationUseCase interface {
 
 type VerificationRepository interface {
 	Insert(ctx context.Context, Verification *entity.Verification) error
+	Verify(ctx context.Context, credential_id string) (*entity.Getcode, error)
 	GetListVerification(ctx context.Context, limit, offset string) ([]*entity.Verification, error)
 	GetDetailVerification(ctx context.Context, ID uuid.UUID) (*entity.Verification, error)
 	UpdateVerification(ctx context.Context, Verification *entity.Verification) error
@@ -98,4 +100,15 @@ func (svc VerificationService) UpdateVerification(ctx context.Context, Verificat
 		return errors.Wrap(err, "[VerificationService-UpdateVerification]")
 	}
 	return nil
+}
+
+func (svc VerificationService) Verify(ctx context.Context, credential_id string) (*entity.Getcode, error) {
+
+	VerificationData, err := svc.VerificationRepo.Verify(ctx, credential_id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return VerificationData, nil
 }

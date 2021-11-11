@@ -62,6 +62,7 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	engine.GET("/get-verification/:id", verificationHandler.GetDetailVerification)
 	engine.PUT("/update-verification/:id", verificationHandler.UpdateVerification)
 	engine.DELETE("/delete-verification/:id", verificationHandler.DeleteVerification)
+	engine.POST("/verify-mail", verificationHandler.Verify)
 
 	//Review
 	engine.POST("/create-review", reviewHandler.CreateReview)

@@ -35,6 +35,19 @@ type VerificationDetailResponse struct {
 	Expiresat     time.Time `json:"expiresat"`
 }
 
+type VerifyBodyRequest struct {
+	Credential_id string    `json:"credential_id" binding:"required"`
+	Code          string    `json:"code" binding:"required"`
+	Expiresat     time.Time `json:"expiresat" binding:"required"`
+}
+
+type VerifyResult struct {
+	Credential_id uuid.UUID `json:"credential_id"`
+	Code          string    `json:"code"`
+	Expiresat     time.Time `json:"expiresat"`
+	Email         string    `json:"email"`
+}
+
 func buildVerificationRowResponse(Verification *entity.Verification) VerificationRowResponse {
 	form := VerificationRowResponse{
 		Id:            Verification.Id,
@@ -223,5 +236,36 @@ func (handler *VerificationHandler) DeleteVerification(echoCtx echo.Context) err
 	}
 
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", nil)
+	return echoCtx.JSON(res.Status, res)
+}
+
+func (handler *VerificationHandler) Verify(echoCtx echo.Context) error {
+	var form VerifyBodyRequest
+	if err := echoCtx.Bind(&form); err != nil {
+		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+
+	}
+
+	userData, err := handler.service.Verify(echoCtx.Request().Context(), form.Credential_id)
+	if err != nil {
+		errorResponse := buildErrorResponse(err, entity.ErrInvalidCredential)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
+
+	if err != nil {
+		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
+	}
+
+	result := &VerifyResult{
+		userData.Credential_id,
+		userData.Code,
+		userData.Expiresat,
+		userData.Email,
+	}
+
+	var res = entity.NewResponse(nethttp.StatusCreated, "Request processed successfully.", result)
+	verify_mail(*result)
 	return echoCtx.JSON(res.Status, res)
 }
