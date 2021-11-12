@@ -36,7 +36,3 @@ func NewSeller(seller bool) *Credential {
 func (model *Credential) TableName() string {
 	return CredentialTableName
 }
-
-// func (tv *TV) GenerateSlug() string {
-// 	return html.EscapeString(strings.ToLower(strings.ReplaceAll(tv.title, " ", "-")))
-// }

@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/middleware"
 )
 
-type JWThandler struct{}
+type Middlewarehandler struct{}
 
 var IsLoggedIn = middleware.JWTWithConfig(middleware.JWTConfig{
 	// SigningKey: os.Getenv("JWT_SECRET_KEY"),
@@ -27,7 +27,24 @@ func isSeller(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-// func (handler *JWThandler) Private(echoCtx echo.Context) error {
+// func mailing(next echo.HandlerFunc) echo.HandlerFunc {
+// 	return func(c echo.Context) error {
+// 		user := c.Get("user").(*jwt.Token)
+// 		err := Sendmail(user)
+// 		if err == nil {
+// 			return c.String(http.StatusOK, "Welcome ")
+// 		}
+// 		return next(c)
+// 	}
+// }
+
+// func (handler *Middlewarehandler) mailHandler(c echo.Context) error {
+// 	user := c.Get("user").(*jwt.Token)
+// 	Sendmail(user)
+// 	return c.String(http.StatusOK, "Mail sent!")
+// }
+
+// func (handler *Middlewarehandler) Private(echoCtx echo.Context) error {
 // 	user := echoCtx.Get("user").(*jwt.Token)
 // 	claims := user.Claims.(jwt.MapClaims)
 // 	name := claims["name"].(string)

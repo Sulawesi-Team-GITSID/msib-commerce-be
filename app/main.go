@@ -41,10 +41,14 @@ func main() {
 	ProfileHandler := buildProfileHandler(db)
 	GameHandler := buildGameHandler(db)
 	VoucherHandler := buildVoucherHandler(db)
+	VerificationHandler := buildVerificationHandler(db)
+	Middlewarehandler := &http.Middlewarehandler{}
 	ReviewHandler := buildReviewHandler(db)
 	JWThandler := &http.JWThandler{}
 	SuperAdminHandler := buildSuperAdminHandler(db)
-	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, GameHandler, VoucherHandler, ReviewHandler, SuperAdminHandler, JWThandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+	// usersHandler := buildUsersHandler(db)
+	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, GameHandler, VoucherHandler, VerificationHandler, Middlewarehandler, ReviewHandler, SuperAdminHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+
 	server := &nethttp.Server{
 		Addr:    fmt.Sprintf(":%s", cfg.Port),
 		Handler: engine,
@@ -127,6 +131,12 @@ func buildVoucherHandler(db *gorm.DB) *http.VoucherHandler {
 	repo := repository.NewVoucherRepository(db)
 	VoucherService := service.NewVoucherService(repo)
 	return http.NewVoucherHandler(VoucherService)
+}
+
+func buildVerificationHandler(db *gorm.DB) *http.VerificationHandler {
+	repo := repository.NewVerificationRepository(db)
+	VerificationService := service.NewVerificationService(repo)
+	return http.NewVerificationHandler(VerificationService)
 }
 
 func buildReviewHandler(db *gorm.DB) *http.ReviewHandler {

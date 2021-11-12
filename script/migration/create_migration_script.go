@@ -21,6 +21,7 @@ func main() {
 	checkError(err)
 
 	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=require",
+		// dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		config.Database.Host,
 		config.Database.Port,
 		config.Database.Username,
@@ -46,12 +47,18 @@ func main() {
 	log.Info().Msg("  TableModel [" + (&entity.Game{}).TableName() + "]")
 	db.AutoMigrate(&entity.Voucher{})
 	log.Info().Msg("  TableModel [" + (&entity.Voucher{}).TableName() + "]")
+	db.AutoMigrate(&entity.Verification{})
+	log.Info().Msg("  TableModel [" + (&entity.Verification{}).TableName() + "]")
 	db.AutoMigrate(&entity.GiftCard{})
 	log.Info().Msg("  TableModel [" + (&entity.GiftCard{}).TableName() + "]")
 	db.AutoMigrate(&entity.Review{})
 	log.Info().Msg("  TableModel [" + (&entity.Review{}).TableName() + "]")
 	db.AutoMigrate(&entity.SuperAdmin{})
 	log.Info().Msg("  TableModel [" + (&entity.SuperAdmin{}).TableName() + "]")
+
+	// db.AutoMigrate(&entity.Users{})
+	// log.Info().Msg("  TableModel [" + (&entity.Users{}).TableName() + "]")
+
 }
 
 func executePendingMigrations(db *gorm.DB) {
