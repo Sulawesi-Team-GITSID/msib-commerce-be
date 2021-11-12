@@ -44,7 +44,6 @@ func main() {
 	VerificationHandler := buildVerificationHandler(db)
 	Middlewarehandler := &http.Middlewarehandler{}
 	ReviewHandler := buildReviewHandler(db)
-	JWThandler := &http.JWThandler{}
 	SuperAdminHandler := buildSuperAdminHandler(db)
 	// usersHandler := buildUsersHandler(db)
 	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, GameHandler, VoucherHandler, VerificationHandler, Middlewarehandler, ReviewHandler, SuperAdminHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
