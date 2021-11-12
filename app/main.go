@@ -44,8 +44,10 @@ func main() {
 	VerificationHandler := buildVerificationHandler(db)
 	Middlewarehandler := &http.Middlewarehandler{}
 	ReviewHandler := buildReviewHandler(db)
+	SuperAdminHandler := buildSuperAdminHandler(db)
 	// usersHandler := buildUsersHandler(db)
-	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, GameHandler, VoucherHandler, VerificationHandler, Middlewarehandler, ReviewHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, GameHandler, VoucherHandler, VerificationHandler, Middlewarehandler, ReviewHandler, SuperAdminHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+
 	server := &nethttp.Server{
 		Addr:    fmt.Sprintf(":%s", cfg.Port),
 		Handler: engine,
@@ -142,8 +144,8 @@ func buildReviewHandler(db *gorm.DB) *http.ReviewHandler {
 	return http.NewReviewHandler(ReviewService)
 }
 
-// func buildUsersHandler(db *gorm.DB) *http.UsersHandler {
-// 	repo := repository.NewUsersRepository(db)
-// 	usersService := service.NewUsersService(repo)
-// 	return http.NewUsersHandler(usersService)
-// }
+func buildSuperAdminHandler(db *gorm.DB) *http.SuperAdminHandler {
+	repo := repository.NewSuperAdminRepository(db)
+	superAdminService := service.NewSuperAdminService(repo)
+	return http.NewSuperAdminHandler(superAdminService)
+}
