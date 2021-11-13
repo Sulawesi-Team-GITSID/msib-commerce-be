@@ -3,7 +3,6 @@ package http
 import (
 	"backend-service/entity"
 	"backend-service/service"
-	"net/http"
 	nethttp "net/http"
 	"time"
 
@@ -114,7 +113,7 @@ func NewProfileHandler(service service.ProfileUseCase) *ProfileHandler {
 func (handler *ProfileHandler) CreateProfile(echoCtx echo.Context) error {
 	var form CreateProfileBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 
 	}
@@ -130,7 +129,7 @@ func (handler *ProfileHandler) CreateProfile(echoCtx echo.Context) error {
 	)
 
 	if err := handler.service.Create(echoCtx.Request().Context(), ProfileEntity); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 
@@ -141,13 +140,13 @@ func (handler *ProfileHandler) CreateProfile(echoCtx echo.Context) error {
 func (handler *ProfileHandler) GetListProfile(echoCtx echo.Context) error {
 	var form QueryParamsProfile
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	Profile, err := handler.service.GetListProfile(echoCtx.Request().Context(), form.Limit, form.Offset)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Profile)
@@ -158,20 +157,20 @@ func (handler *ProfileHandler) GetListProfile(echoCtx echo.Context) error {
 func (handler *ProfileHandler) GetDetailProfile(echoCtx echo.Context) error {
 	idParam := echoCtx.Param("id")
 	if len(idParam) == 0 {
-		errorResponse := buildErrorResponse(nil, entity.ErrInvalidInput)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	id, err := uuid.Parse(idParam)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	Profile, err := handler.service.GetDetailProfile(echoCtx.Request().Context(), id)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Profile)
@@ -181,7 +180,7 @@ func (handler *ProfileHandler) GetDetailProfile(echoCtx echo.Context) error {
 func (handler *ProfileHandler) UpdateProfile(echoCtx echo.Context) error {
 	var form CreateProfileBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 
 	}
@@ -189,20 +188,20 @@ func (handler *ProfileHandler) UpdateProfile(echoCtx echo.Context) error {
 	idParam := echoCtx.Param("id")
 
 	if len(idParam) == 0 {
-		errorResponse := buildErrorResponse(nil, entity.ErrInvalidInput)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	id, err := uuid.Parse(idParam)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	_, err = handler.service.GetDetailProfile(echoCtx.Request().Context(), id)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	ProfileEntity := entity.NewProfile(
@@ -216,7 +215,7 @@ func (handler *ProfileHandler) UpdateProfile(echoCtx echo.Context) error {
 	)
 
 	if err := handler.service.UpdateProfile(echoCtx.Request().Context(), ProfileEntity); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 
@@ -227,20 +226,20 @@ func (handler *ProfileHandler) UpdateProfile(echoCtx echo.Context) error {
 func (handler *ProfileHandler) DeleteProfile(echoCtx echo.Context) error {
 	idParam := echoCtx.Param("id")
 	if len(idParam) == 0 {
-		errorResponse := buildErrorResponse(nil, entity.ErrInvalidInput)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	id, err := uuid.Parse(idParam)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	err = handler.service.DeleteProfile(echoCtx.Request().Context(), id)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", nil)

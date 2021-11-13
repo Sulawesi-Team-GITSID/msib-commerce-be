@@ -3,6 +3,7 @@ package service
 import (
 	"backend-service/entity"
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
@@ -11,6 +12,9 @@ import (
 var (
 	// ErrNilVerification occurs when a nil Verification is passed.
 	ErrNilVerification = errors.New("Verification is nil")
+
+	//If user verify after expiration time
+	ErrNilExpired = errors.New("Sorry, link is expired")
 )
 
 // VerificationService responsible for any flow related to Verification.
@@ -105,6 +109,10 @@ func (svc VerificationService) UpdateVerification(ctx context.Context, Verificat
 func (svc VerificationService) Verify(ctx context.Context, credential_id string) (*entity.Getcode, error) {
 
 	VerificationData, err := svc.VerificationRepo.Verify(ctx, credential_id)
+
+	if VerificationData.Expiresat.Before(time.Now()) {
+		return nil, ErrNilExpired
+	}
 
 	if err != nil {
 		return nil, err

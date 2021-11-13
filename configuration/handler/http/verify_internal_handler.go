@@ -3,7 +3,6 @@ package http
 import (
 	"backend-service/entity"
 	"backend-service/service"
-	"net/http"
 	nethttp "net/http"
 	"time"
 
@@ -112,7 +111,7 @@ func NewVerificationHandler(service service.VerificationUseCase) *VerificationHa
 func (handler *VerificationHandler) CreateVerification(echoCtx echo.Context) error {
 	var form CreateVerificationBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 
 	}
@@ -125,7 +124,7 @@ func (handler *VerificationHandler) CreateVerification(echoCtx echo.Context) err
 	)
 
 	if err := handler.service.Create(echoCtx.Request().Context(), VerificationEntity); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 
@@ -136,13 +135,13 @@ func (handler *VerificationHandler) CreateVerification(echoCtx echo.Context) err
 func (handler *VerificationHandler) GetListVerification(echoCtx echo.Context) error {
 	var form QueryParamsVerification
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	Verification, err := handler.service.GetListVerification(echoCtx.Request().Context(), form.Limit, form.Offset)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Verification)
@@ -153,20 +152,20 @@ func (handler *VerificationHandler) GetListVerification(echoCtx echo.Context) er
 func (handler *VerificationHandler) GetDetailVerification(echoCtx echo.Context) error {
 	idParam := echoCtx.Param("id")
 	if len(idParam) == 0 {
-		errorResponse := buildErrorResponse(nil, entity.ErrInvalidInput)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	id, err := uuid.Parse(idParam)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	Verification, err := handler.service.GetDetailVerification(echoCtx.Request().Context(), id)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Verification)
@@ -176,7 +175,7 @@ func (handler *VerificationHandler) GetDetailVerification(echoCtx echo.Context) 
 func (handler *VerificationHandler) UpdateVerification(echoCtx echo.Context) error {
 	var form CreateVerificationBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 
 	}
@@ -184,20 +183,20 @@ func (handler *VerificationHandler) UpdateVerification(echoCtx echo.Context) err
 	idParam := echoCtx.Param("id")
 
 	if len(idParam) == 0 {
-		errorResponse := buildErrorResponse(nil, entity.ErrInvalidInput)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	id, err := uuid.Parse(idParam)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	_, err = handler.service.GetDetailVerification(echoCtx.Request().Context(), id)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	VerificationEntity := entity.NewVerification(
@@ -208,7 +207,7 @@ func (handler *VerificationHandler) UpdateVerification(echoCtx echo.Context) err
 	)
 
 	if err := handler.service.UpdateVerification(echoCtx.Request().Context(), VerificationEntity); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 
@@ -219,20 +218,20 @@ func (handler *VerificationHandler) UpdateVerification(echoCtx echo.Context) err
 func (handler *VerificationHandler) DeleteVerification(echoCtx echo.Context) error {
 	idParam := echoCtx.Param("id")
 	if len(idParam) == 0 {
-		errorResponse := buildErrorResponse(nil, entity.ErrInvalidInput)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	id, err := uuid.Parse(idParam)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	err = handler.service.DeleteVerification(echoCtx.Request().Context(), id)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", nil)
@@ -242,19 +241,19 @@ func (handler *VerificationHandler) DeleteVerification(echoCtx echo.Context) err
 func (handler *VerificationHandler) Verify(echoCtx echo.Context) error {
 	var form VerifyBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 
 	}
 
 	userData, err := handler.service.Verify(echoCtx.Request().Context(), form.Credential_id)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidCredential)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrAccessDenied)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 

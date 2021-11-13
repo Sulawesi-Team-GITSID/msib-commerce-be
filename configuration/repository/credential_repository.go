@@ -4,6 +4,7 @@ import (
 	"backend-service/entity"
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
@@ -54,6 +55,28 @@ func (repo *CredentialRepository) Login(ctx context.Context, email string, passw
 		First(&models).
 		Error; err != nil {
 		return nil, errors.Wrap(err, "[UsersRepository-Login]")
+	}
+	return models, nil
+}
+
+func (repo *CredentialRepository) UpdateCredential(ctx context.Context, ent *entity.Credential) error {
+	if err := repo.db.
+		WithContext(ctx).
+		Model(&entity.Credential{}).Where("id = ?", ent.Id).
+		Update("verified", "true").Error; err != nil {
+		return errors.Wrap(err, "[GameRepository-Update]")
+	}
+	return nil
+}
+
+func (repo *CredentialRepository) GetDetailCredential(ctx context.Context, ID uuid.UUID) (*entity.Credential, error) {
+	var models *entity.Credential
+	if err := repo.db.
+		WithContext(ctx).
+		Model(&entity.Credential{}).
+		Take(&models, ID).
+		Error; err != nil {
+		return nil, errors.Wrap(err, "[CredentialRepository-FindById]")
 	}
 	return models, nil
 }

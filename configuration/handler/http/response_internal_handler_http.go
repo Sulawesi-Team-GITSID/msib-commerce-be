@@ -58,8 +58,9 @@ func NewMeta(limit, offset int, total int64) *Meta {
 
 // ErrorResponse define atributes needed for error response.
 type ErrorResponse struct {
-	Error error       `json:"error"`
-	Meta  interface{} `json:"meta"`
+	Status int         `json:"status"`
+	Error  error       `json:"error"`
+	Meta   interface{} `json:"meta"`
 }
 
 // GetAnyResponseArticle defines any response with Data and Meta structure
@@ -69,23 +70,28 @@ type GetAnyResponse struct {
 }
 
 // NewErrorResponse creates an instance of ErrorResponse.
-func NewErrorResponse(error error) *ErrorResponse {
+func NewErrorResponse(status int, error error) *ErrorResponse {
 	return &ErrorResponse{
-		Error: error,
-		Meta:  struct{}{},
+		Status: status,
+		Error:  error,
+		Meta:   struct{}{},
 	}
+}
+
+func ErrorStatusResponse(int) {
+
 }
 
 func buildSuccessResponse(data interface{}, meta interface{}) *SuccessResponse {
 	return NewSuccessResponse(data, meta)
 }
 
-func buildErrorResponse(originalError, formattedError error) *ErrorResponse {
+func buildErrorResponse(status int, originalError, formattedError error) *ErrorResponse {
 	if originalError != nil {
 		// send log to Error Reporting
 		tool.LogAndPrintError(originalError)
 	}
-	return NewErrorResponse(formattedError)
+	return NewErrorResponse(status, formattedError)
 }
 
 // Success represents success response.

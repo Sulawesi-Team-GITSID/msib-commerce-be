@@ -128,7 +128,7 @@ func NewCredentialHandler(service service.CredentialUseCase) *CredentialHandler 
 func (handler *CredentialHandler) CreateCredential(echoCtx echo.Context) error {
 	var form CreateCredentialBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 
 	}
@@ -143,7 +143,7 @@ func (handler *CredentialHandler) CreateCredential(echoCtx echo.Context) error {
 	)
 
 	if err := handler.service.Create(echoCtx.Request().Context(), CredentialEntity); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 
@@ -155,13 +155,13 @@ func (handler *CredentialHandler) CreateCredential(echoCtx echo.Context) error {
 func (handler *CredentialHandler) GetListCredential(echoCtx echo.Context) error {
 	var form QueryParamsCredential
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	Credential, err := handler.service.GetListCredential(echoCtx.Request().Context(), form.Limit, form.Offset)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Credential)
@@ -172,14 +172,14 @@ func (handler *CredentialHandler) GetListCredential(echoCtx echo.Context) error 
 func (handler *CredentialHandler) Login(echoCtx echo.Context) error {
 	var form LoginBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 
 	}
 
 	userData, err := handler.service.Login(echoCtx.Request().Context(), form.Email, form.Password)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidCredential)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidCredential)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
@@ -203,7 +203,7 @@ func (handler *CredentialHandler) Login(echoCtx echo.Context) error {
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET_KEY")))
 
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 
@@ -213,5 +213,44 @@ func (handler *CredentialHandler) Login(echoCtx echo.Context) error {
 	}
 
 	var res = entity.NewResponse(nethttp.StatusCreated, "Request processed successfully.", result)
+	return echoCtx.JSON(res.Status, res)
+}
+
+func (handler *CredentialHandler) UpdateCredential(echoCtx echo.Context) error {
+	var form CreateCredentialBodyRequest
+	idParam := echoCtx.Param("id")
+
+	if len(idParam) == 0 {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
+
+	id, err := uuid.Parse(idParam)
+	if err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
+
+	_, err = handler.service.GetDetailCredential(echoCtx.Request().Context(), id)
+	if err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
+
+	CredentialEntity := entity.NewCredential(
+		id,
+		form.Username,
+		form.Email,
+		form.Password,
+		form.Seller,
+		form.Verified,
+	)
+
+	if err := handler.service.UpdateCredential(echoCtx.Request().Context(), CredentialEntity); err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
+	}
+
+	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", nil)
 	return echoCtx.JSON(res.Status, res)
 }

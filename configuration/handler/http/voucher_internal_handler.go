@@ -98,7 +98,7 @@ func NewVoucherHandler(service service.VoucherUseCase) *VoucherHandler {
 func (handler *VoucherHandler) CreateVoucher(echoCtx echo.Context) error {
 	var form CreateVoucherBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 
 	}
@@ -111,7 +111,7 @@ func (handler *VoucherHandler) CreateVoucher(echoCtx echo.Context) error {
 	)
 
 	if err := handler.service.Create(echoCtx.Request().Context(), VoucherEntity); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 
@@ -122,13 +122,13 @@ func (handler *VoucherHandler) CreateVoucher(echoCtx echo.Context) error {
 func (handler *VoucherHandler) GetListVoucher(echoCtx echo.Context) error {
 	var form QueryParamsVoucher
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	Voucher, err := handler.service.GetListVoucher(echoCtx.Request().Context(), form.Limit, form.Offset)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Voucher)
@@ -139,19 +139,19 @@ func (handler *VoucherHandler) GetListVoucher(echoCtx echo.Context) error {
 func (handler *VoucherHandler) GetDetailVoucher(echoCtx echo.Context) error {
 	idParam := echoCtx.Param("id")
 	if len(idParam) == 0 {
-		errorResponse := buildErrorResponse(nil, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidInput)
 		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
 	}
 
 	id, err := uuid.Parse(idParam)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
 	}
 
 	Voucher, err := handler.service.GetDetailVoucher(echoCtx.Request().Context(), id)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
 	}
 
@@ -162,7 +162,7 @@ func (handler *VoucherHandler) GetDetailVoucher(echoCtx echo.Context) error {
 func (handler *VoucherHandler) UpdateVoucher(echoCtx echo.Context) error {
 	var form CreateVoucherBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 
 	}
@@ -170,19 +170,19 @@ func (handler *VoucherHandler) UpdateVoucher(echoCtx echo.Context) error {
 	idParam := echoCtx.Param("id")
 
 	if len(idParam) == 0 {
-		errorResponse := buildErrorResponse(nil, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidInput)
 		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
 	}
 
 	id, err := uuid.Parse(idParam)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
 	}
 
 	_, err = handler.service.GetDetailVoucher(echoCtx.Request().Context(), id)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
 	}
 
@@ -194,7 +194,7 @@ func (handler *VoucherHandler) UpdateVoucher(echoCtx echo.Context) error {
 	)
 
 	if err := handler.service.UpdateVoucher(echoCtx.Request().Context(), VoucherEntity); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 
@@ -205,19 +205,19 @@ func (handler *VoucherHandler) UpdateVoucher(echoCtx echo.Context) error {
 func (handler *VoucherHandler) DeleteVoucher(echoCtx echo.Context) error {
 	idParam := echoCtx.Param("id")
 	if len(idParam) == 0 {
-		errorResponse := buildErrorResponse(nil, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidInput)
 		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
 	}
 
 	id, err := uuid.Parse(idParam)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
 	}
 
 	err = handler.service.DeleteVoucher(echoCtx.Request().Context(), id)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
 	}
 
