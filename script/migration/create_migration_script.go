@@ -53,8 +53,12 @@ func main() {
 	log.Info().Msg("  TableModel [" + (&entity.GiftCard{}).TableName() + "]")
 	db.AutoMigrate(&entity.Review{})
 	log.Info().Msg("  TableModel [" + (&entity.Review{}).TableName() + "]")
+	db.AutoMigrate(&entity.SuperAdmin{})
+	log.Info().Msg("  TableModel [" + (&entity.SuperAdmin{}).TableName() + "]")
+
 	// db.AutoMigrate(&entity.Users{})
 	// log.Info().Msg("  TableModel [" + (&entity.Users{}).TableName() + "]")
+
 }
 
 func executePendingMigrations(db *gorm.DB) {
