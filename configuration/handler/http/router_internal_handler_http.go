@@ -40,6 +40,7 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	engine.GET("/list-credential", credentialHandler.GetListCredential, IsLoggedIn)
 	engine.POST("/login", credentialHandler.Login)
 	engine.GET("/update-credential/:id", credentialHandler.UpdateCredential)
+	engine.PUT("/reset-password/:id", credentialHandler.ForgotPassword)
 	// engine.GET("/private", JWThandler.Private)
 
 	//Game

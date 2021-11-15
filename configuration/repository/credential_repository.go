@@ -80,3 +80,14 @@ func (repo *CredentialRepository) GetDetailCredential(ctx context.Context, ID uu
 	}
 	return models, nil
 }
+
+func (repo *CredentialRepository) ForgotPassword(ctx context.Context, ent *entity.Credential) error {
+	if err := repo.db.
+		WithContext(ctx).
+		Model(&entity.Credential{}).
+		Where("id = ?", ent.Id).
+		Update("password", ent.Password).Error; err != nil {
+		return errors.Wrap(err, "[CredentialRepository-ForgotPassword]")
+	}
+	return nil
+}
