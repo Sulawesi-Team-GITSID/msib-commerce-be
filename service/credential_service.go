@@ -33,6 +33,7 @@ type CredentialUseCase interface {
 	GetListCredential(ctx context.Context, limit, offset string) ([]*entity.Credential, error)
 	GetDetailCredential(ctx context.Context, ID uuid.UUID) (*entity.Credential, error)
 	UpdateCredential(ctx context.Context, Credential *entity.Credential) error
+	ForgotPassword(ctx context.Context, Credential *entity.Credential) error
 }
 
 type CredentialRepository interface {
@@ -41,6 +42,7 @@ type CredentialRepository interface {
 	GetListCredential(ctx context.Context, limit, offset string) ([]*entity.Credential, error)
 	GetDetailCredential(ctx context.Context, ID uuid.UUID) (*entity.Credential, error)
 	UpdateCredential(ctx context.Context, Credential *entity.Credential) error
+	ForgotPassword(ctx context.Context, Credential *entity.Credential) error
 }
 
 func (svc CredentialService) Create(ctx context.Context, Credential *entity.Credential) error {
@@ -102,6 +104,18 @@ func (svc CredentialService) UpdateCredential(ctx context.Context, Credential *e
 
 	if err := svc.CredentialRepo.UpdateCredential(ctx, Credential); err != nil {
 		return errors.Wrap(err, "[CredentialService-UpdateCredential]")
+	}
+	return nil
+}
+
+func (svc CredentialService) ForgotPassword(ctx context.Context, Credential *entity.Credential) error {
+	// Checking nil Credential
+	if Credential == nil {
+		return ErrNilCredential
+	}
+
+	if err := svc.CredentialRepo.ForgotPassword(ctx, Credential); err != nil {
+		return errors.Wrap(err, "[CredentialService-ForgotPassword]")
 	}
 	return nil
 }
