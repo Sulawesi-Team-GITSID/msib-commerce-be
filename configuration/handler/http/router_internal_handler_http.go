@@ -39,6 +39,7 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	engine.POST("/create-credential", credentialHandler.CreateCredential)
 	engine.GET("/list-credential", credentialHandler.GetListCredential, IsLoggedIn)
 	engine.POST("/login", credentialHandler.Login)
+	engine.GET("/update-credential/:id", credentialHandler.UpdateCredential)
 	// engine.GET("/private", JWThandler.Private)
 
 	//Game
@@ -63,6 +64,7 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	engine.GET("/get-verification/:id", verificationHandler.GetDetailVerification)
 	engine.PUT("/update-verification/:id", verificationHandler.UpdateVerification)
 	engine.DELETE("/delete-verification/:id", verificationHandler.DeleteVerification)
+	engine.POST("/verify-mail", verificationHandler.Verify)
 
 	//Review
 	engine.POST("/create-review", reviewHandler.CreateReview)

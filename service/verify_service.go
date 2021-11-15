@@ -3,6 +3,7 @@ package service
 import (
 	"backend-service/entity"
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
@@ -11,6 +12,9 @@ import (
 var (
 	// ErrNilVerification occurs when a nil Verification is passed.
 	ErrNilVerification = errors.New("Verification is nil")
+
+	//If user verify after expiration time
+	ErrNilExpired = errors.New("Sorry, link is expired")
 )
 
 // VerificationService responsible for any flow related to Verification.
@@ -28,6 +32,7 @@ func NewVerificationService(VerificationRepo VerificationRepository) *Verificati
 
 type VerificationUseCase interface {
 	Create(ctx context.Context, Verification *entity.Verification) error
+	Verify(ctx context.Context, credential_id string) (*entity.Getcode, error)
 	GetListVerification(ctx context.Context, limit, offset string) ([]*entity.Verification, error)
 	GetDetailVerification(ctx context.Context, ID uuid.UUID) (*entity.Verification, error)
 	UpdateVerification(ctx context.Context, Verification *entity.Verification) error
@@ -36,6 +41,7 @@ type VerificationUseCase interface {
 
 type VerificationRepository interface {
 	Insert(ctx context.Context, Verification *entity.Verification) error
+	Verify(ctx context.Context, credential_id string) (*entity.Getcode, error)
 	GetListVerification(ctx context.Context, limit, offset string) ([]*entity.Verification, error)
 	GetDetailVerification(ctx context.Context, ID uuid.UUID) (*entity.Verification, error)
 	UpdateVerification(ctx context.Context, Verification *entity.Verification) error
@@ -98,4 +104,19 @@ func (svc VerificationService) UpdateVerification(ctx context.Context, Verificat
 		return errors.Wrap(err, "[VerificationService-UpdateVerification]")
 	}
 	return nil
+}
+
+func (svc VerificationService) Verify(ctx context.Context, credential_id string) (*entity.Getcode, error) {
+
+	VerificationData, err := svc.VerificationRepo.Verify(ctx, credential_id)
+
+	if VerificationData.Expiresat.Before(time.Now()) {
+		return nil, ErrNilExpired
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return VerificationData, nil
 }

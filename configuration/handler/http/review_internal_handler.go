@@ -97,7 +97,7 @@ func NewReviewHandler(service service.ReviewUseCase) *ReviewHandler {
 func (handler *ReviewHandler) CreateReview(echoCtx echo.Context) error {
 	var form CreateReviewBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 
 	}
@@ -110,7 +110,7 @@ func (handler *ReviewHandler) CreateReview(echoCtx echo.Context) error {
 	)
 
 	if err := handler.service.Create(echoCtx.Request().Context(), ReviewEntity); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 
@@ -121,13 +121,13 @@ func (handler *ReviewHandler) CreateReview(echoCtx echo.Context) error {
 func (handler *ReviewHandler) GetListReview(echoCtx echo.Context) error {
 	var form QueryParamsReview
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	Review, err := handler.service.GetListReview(echoCtx.Request().Context(), form.Limit, form.Offset)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Review)

@@ -3,7 +3,6 @@ package http
 import (
 	"backend-service/entity"
 	"backend-service/service"
-	"net/http"
 	nethttp "net/http"
 
 	"github.com/google/uuid"
@@ -98,7 +97,7 @@ func NewGameHandler(service service.GameUseCase) *GameHandler {
 func (handler *GameHandler) CreateGame(echoCtx echo.Context) error {
 	var form CreateGameBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 
 	}
@@ -111,7 +110,7 @@ func (handler *GameHandler) CreateGame(echoCtx echo.Context) error {
 	)
 
 	if err := handler.service.Create(echoCtx.Request().Context(), GameEntity); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 
@@ -122,13 +121,13 @@ func (handler *GameHandler) CreateGame(echoCtx echo.Context) error {
 func (handler *GameHandler) GetListGame(echoCtx echo.Context) error {
 	var form QueryParamsGame
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	Game, err := handler.service.GetListGame(echoCtx.Request().Context(), form.Limit, form.Offset)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Game)
@@ -139,13 +138,13 @@ func (handler *GameHandler) GetListGame(echoCtx echo.Context) error {
 func (handler *GameHandler) GetListGenre(echoCtx echo.Context) error {
 	var form QueryParamsGame
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	Game, err := handler.service.GetListGenre(echoCtx.Request().Context(), form.Limit, form.Offset)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Game)
@@ -156,13 +155,13 @@ func (handler *GameHandler) GetListGenre(echoCtx echo.Context) error {
 func (handler *GameHandler) GetListTrendGame(echoCtx echo.Context) error {
 	var form QueryParamsGame
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	Game, err := handler.service.GetListTrendGame(echoCtx.Request().Context(), form.Limit, form.Offset)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Game)
@@ -173,20 +172,20 @@ func (handler *GameHandler) GetListTrendGame(echoCtx echo.Context) error {
 func (handler *GameHandler) GetDetailGame(echoCtx echo.Context) error {
 	idParam := echoCtx.Param("id")
 	if len(idParam) == 0 {
-		errorResponse := buildErrorResponse(nil, entity.ErrInvalidInput)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	id, err := uuid.Parse(idParam)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	Game, err := handler.service.GetDetailGame(echoCtx.Request().Context(), id)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Game)
@@ -196,7 +195,7 @@ func (handler *GameHandler) GetDetailGame(echoCtx echo.Context) error {
 func (handler *GameHandler) UpdateGame(echoCtx echo.Context) error {
 	var form CreateGameBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 
 	}
@@ -204,20 +203,20 @@ func (handler *GameHandler) UpdateGame(echoCtx echo.Context) error {
 	idParam := echoCtx.Param("id")
 
 	if len(idParam) == 0 {
-		errorResponse := buildErrorResponse(nil, entity.ErrInvalidInput)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	id, err := uuid.Parse(idParam)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	_, err = handler.service.GetDetailGame(echoCtx.Request().Context(), id)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	GameEntity := entity.NewGame(
@@ -228,7 +227,7 @@ func (handler *GameHandler) UpdateGame(echoCtx echo.Context) error {
 	)
 
 	if err := handler.service.UpdateGame(echoCtx.Request().Context(), GameEntity); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 
@@ -239,20 +238,20 @@ func (handler *GameHandler) UpdateGame(echoCtx echo.Context) error {
 func (handler *GameHandler) DeleteGame(echoCtx echo.Context) error {
 	idParam := echoCtx.Param("id")
 	if len(idParam) == 0 {
-		errorResponse := buildErrorResponse(nil, entity.ErrInvalidInput)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	id, err := uuid.Parse(idParam)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	err = handler.service.DeleteGame(echoCtx.Request().Context(), id)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
-		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", nil)

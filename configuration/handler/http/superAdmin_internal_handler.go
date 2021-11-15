@@ -87,14 +87,14 @@ func NewSuperAdminHandler(service service.SuperAdminUseCase) *SuperAdminHandler 
 func (handler *SuperAdminHandler) LoginAdmin(echoCtx echo.Context) error {
 	var form LoginBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 
 	}
 
 	userData, err := handler.service.LoginAdmin(echoCtx.Request().Context(), form.Email, form.Password)
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidCredential)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidCredential)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
@@ -112,7 +112,7 @@ func (handler *SuperAdminHandler) LoginAdmin(echoCtx echo.Context) error {
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET_KEY")))
 
 	if err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 
@@ -130,7 +130,7 @@ func (handler *SuperAdminHandler) LoginAdmin(echoCtx echo.Context) error {
 func (handler *SuperAdminHandler) Register(echoCtx echo.Context) error {
 	var form RegisterBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 
 	}
@@ -143,7 +143,7 @@ func (handler *SuperAdminHandler) Register(echoCtx echo.Context) error {
 	)
 
 	if err := handler.service.Register(echoCtx.Request().Context(), SuperAdminEntity); err != nil {
-		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 

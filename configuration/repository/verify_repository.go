@@ -77,3 +77,18 @@ func (repo *VerificationRepository) UpdateVerification(ctx context.Context, ent 
 	}
 	return nil
 }
+
+func (repo *VerificationRepository) Verify(ctx context.Context, credential_id string) (*entity.Getcode, error) {
+	var models *entity.Getcode
+	if err := repo.db.
+		WithContext(ctx).
+		Model(&entity.Verification{}).
+		Select(`verification.credential_id, verification.code, verification.expiresat, credential.email`).
+		Joins(`inner join credential on credential.id = verification.credential_id`).
+		Where(`verification.credential_id`, credential_id).
+		First(&models).
+		Error; err != nil {
+		return nil, errors.Wrap(err, "[VerificationRepository-Verify]")
+	}
+	return models, nil
+}
