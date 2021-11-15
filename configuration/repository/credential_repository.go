@@ -86,7 +86,8 @@ func (repo *CredentialRepository) ForgotPassword(ctx context.Context, ent *entit
 		WithContext(ctx).
 		Model(&entity.Credential{}).
 		Where("id = ?", ent.Id).
-		Update("password", ent.Password).Error; err != nil {
+		Update("password", ent.Password).
+		Error; err != nil {
 		return errors.Wrap(err, "[CredentialRepository-ForgotPassword]")
 	}
 	return nil

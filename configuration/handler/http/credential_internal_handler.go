@@ -22,6 +22,10 @@ type CreateCredentialBodyRequest struct {
 	Verified bool   `json:"verified"`
 }
 
+type UpdatePassword struct {
+	Password string `json:"password"`
+}
+
 // CredentialRowResponse defines all attributes needed to fulfill for Credential row entity.
 type CredentialRowResponse struct {
 	Id       uuid.UUID `json:"id"`
@@ -218,6 +222,11 @@ func (handler *CredentialHandler) Login(echoCtx echo.Context) error {
 
 func (handler *CredentialHandler) UpdateCredential(echoCtx echo.Context) error {
 	var form CreateCredentialBodyRequest
+	if err := echoCtx.Bind(&form); err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+
+	}
 	idParam := echoCtx.Param("id")
 
 	if len(idParam) == 0 {
@@ -257,6 +266,11 @@ func (handler *CredentialHandler) UpdateCredential(echoCtx echo.Context) error {
 
 func (handler *CredentialHandler) ForgotPassword(echoCtx echo.Context) error {
 	var form CreateCredentialBodyRequest
+	if err := echoCtx.Bind(&form); err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+
+	}
 	idParam := echoCtx.Param("id")
 
 	if len(idParam) == 0 {
@@ -290,6 +304,6 @@ func (handler *CredentialHandler) ForgotPassword(echoCtx echo.Context) error {
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 
-	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", nil)
+	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", form)
 	return echoCtx.JSON(res.Status, res)
 }

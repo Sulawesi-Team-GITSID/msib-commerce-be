@@ -26,6 +26,13 @@ func NewCredential(id uuid.UUID, username, email, password string, seller, verif
 		Verified: verified,
 	}
 }
+
+func UpdatePasswordEntity(id uuid.UUID, password string) *Credential {
+	return &Credential{
+		Id:       id,
+		Password: password,
+	}
+}
 func NewSeller(seller bool) *Credential {
 	return &Credential{
 		Seller: seller,
