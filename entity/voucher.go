@@ -10,15 +10,18 @@ const (
 type Voucher struct {
 	Id          uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
 	Game_id     uuid.UUID `gorm:"type:uuid;not_null" json:"game_id"`
+	Shop_id     uuid.UUID `gorm:"type:uuid;not_null" json:"shop_id"`
 	VoucherName string    `gorm:"type:varchar;not_null" json:"nama_voucher"`
 	Harga       int       `gorm:"type:int;not_null" json:"harga"`
 	Game        *Game     `gorm:"foreignKey:Game_id"`
+	Shop        *Shop     `gorm:"foreignKey:Shop_id"`
 }
 
-func NewVoucher(id, game_id uuid.UUID, nama_voucher string, harga int) *Voucher {
+func NewVoucher(id, game_id, shop_id uuid.UUID, nama_voucher string, harga int) *Voucher {
 	return &Voucher{
 		Id:          id,
 		Game_id:     game_id,
+		Shop_id:     shop_id,
 		VoucherName: nama_voucher,
 		Harga:       harga,
 	}

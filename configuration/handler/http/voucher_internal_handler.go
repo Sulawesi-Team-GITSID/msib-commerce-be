@@ -14,6 +14,7 @@ import (
 // CreateVoucherBodyRequest defines all body attributes needed to add Voucher.
 type CreateVoucherBodyRequest struct {
 	Game_id     uuid.UUID `json:"game_id"`
+	Shop_id     uuid.UUID `json:"shop_id"`
 	VoucherName string    `json:"nama_voucher"`
 	Harga       int       `json:"harga"`
 }
@@ -22,6 +23,7 @@ type CreateVoucherBodyRequest struct {
 type VoucherRowResponse struct {
 	Id          uuid.UUID `json:"id"`
 	Game_id     uuid.UUID `json:"game_id"`
+	Shop_id     uuid.UUID `json:"shop_id"`
 	VoucherName string    `json:"nama_voucher"`
 	Harga       int       `json:"harga"`
 }
@@ -30,6 +32,7 @@ type VoucherRowResponse struct {
 type VoucherDetailResponse struct {
 	Id          uuid.UUID `json:"id"`
 	Game_id     uuid.UUID `json:"game_id"`
+	Shop_id     uuid.UUID `json:"shop_id"`
 	VoucherName string    `json:"nama_voucher"`
 	Harga       int       `json:"harga"`
 }
@@ -38,6 +41,7 @@ func buildVoucherRowResponse(Voucher *entity.Voucher) VoucherRowResponse {
 	form := VoucherRowResponse{
 		Id:          Voucher.Id,
 		Game_id:     Voucher.Game_id,
+		Shop_id:     Voucher.Shop_id,
 		VoucherName: Voucher.VoucherName,
 		Harga:       Voucher.Harga,
 	}
@@ -49,6 +53,7 @@ func buildVoucherDetailResponse(Voucher *entity.Voucher) VoucherDetailResponse {
 	form := VoucherDetailResponse{
 		Id:          Voucher.Id,
 		Game_id:     Voucher.Game_id,
+		Shop_id:     Voucher.Shop_id,
 		VoucherName: Voucher.VoucherName,
 		Harga:       Voucher.Harga,
 	}
@@ -106,6 +111,7 @@ func (handler *VoucherHandler) CreateVoucher(echoCtx echo.Context) error {
 	VoucherEntity := entity.NewVoucher(
 		uuid.Nil,
 		form.Game_id,
+		form.Shop_id,
 		form.VoucherName,
 		form.Harga,
 	)
@@ -189,6 +195,7 @@ func (handler *VoucherHandler) UpdateVoucher(echoCtx echo.Context) error {
 	VoucherEntity := entity.NewVoucher(
 		id,
 		form.Game_id,
+		form.Shop_id,
 		form.VoucherName,
 		form.Harga,
 	)
