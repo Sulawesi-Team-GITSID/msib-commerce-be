@@ -2,6 +2,7 @@ package http
 
 import (
 	"log"
+	"os"
 	"time"
 
 	"gopkg.in/gomail.v2"
@@ -57,7 +58,7 @@ func verify_mail(form VerifyResult) {
 	mailer.SetHeader("To", form.Email, "voucherlabs.official@gmail.com")
 	mailer.SetAddressHeader("Cc", "voucherlabs.official@gmail.com", "Tra Lala La")
 	mailer.SetHeader("Subject", "Code Verification")
-	link = "http://localhost:8080/update-credential/" + form.Credential_id.String()
+	link = os.Getenv("RUNNING_HOST") + form.Credential_id.String()
 	text = "Please, click this link before " + form.Expiresat.Format(time.RFC1123)
 
 	mailer.SetBody("text/html", "Here's your verification link, click link<br><a href='"+link+"'>Click here</a><br>"+text)

@@ -59,7 +59,7 @@ func (repo *CredentialRepository) Login(ctx context.Context, email string, passw
 	return models, nil
 }
 
-func (repo *CredentialRepository) UpdateCredential(ctx context.Context, ent *entity.Credential) error {
+func (repo *CredentialRepository) UpdateCredentialVerify(ctx context.Context, ent *entity.Credential) error {
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Credential{}).Where("id = ?", ent.Id).

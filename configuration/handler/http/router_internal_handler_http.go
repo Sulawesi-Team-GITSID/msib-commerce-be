@@ -39,7 +39,7 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	engine.POST("/create-credential", credentialHandler.CreateCredential)
 	engine.GET("/list-credential", credentialHandler.GetListCredential, IsLoggedIn)
 	engine.POST("/login", credentialHandler.Login)
-	engine.GET("/update-credential/:id", credentialHandler.UpdateCredential)
+	engine.GET("/verify-account/:id", credentialHandler.UpdateCredentialVerify)
 	engine.PUT("/reset-password/:id", credentialHandler.ForgotPassword)
 	// engine.GET("/private", JWThandler.Private)
 

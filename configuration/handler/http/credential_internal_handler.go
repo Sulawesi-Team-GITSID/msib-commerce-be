@@ -220,7 +220,7 @@ func (handler *CredentialHandler) Login(echoCtx echo.Context) error {
 	return echoCtx.JSON(res.Status, res)
 }
 
-func (handler *CredentialHandler) UpdateCredential(echoCtx echo.Context) error {
+func (handler *CredentialHandler) UpdateCredentialVerify(echoCtx echo.Context) error {
 	var form CreateCredentialBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
 		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
@@ -255,7 +255,7 @@ func (handler *CredentialHandler) UpdateCredential(echoCtx echo.Context) error {
 		form.Verified,
 	)
 
-	if err := handler.service.UpdateCredential(echoCtx.Request().Context(), CredentialEntity); err != nil {
+	if err := handler.service.UpdateCredentialVerify(echoCtx.Request().Context(), CredentialEntity); err != nil {
 		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
