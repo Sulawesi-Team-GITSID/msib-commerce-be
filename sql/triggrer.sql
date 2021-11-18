@@ -23,3 +23,21 @@ CREATE TRIGGER trigger_verification
   ON credential
   FOR EACH ROW
   EXECUTE PROCEDURE trigger_function();
+
+/* RUN FOURTH */
+CREATE FUNCTION seller_function() 
+   RETURNS TRIGGER 
+   LANGUAGE PLPGSQL
+AS $$
+BEGIN
+	update credential set seller = true where id = new.credential_id;
+    RETURN NEW;
+END;
+$$
+
+/* RUN Fifth */
+CREATE TRIGGER trigger_seller
+  AFTER INSERT
+  ON shop
+  FOR EACH ROW
+  EXECUTE PROCEDURE seller_function();

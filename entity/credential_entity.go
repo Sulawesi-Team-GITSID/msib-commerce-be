@@ -33,11 +33,6 @@ func UpdatePasswordEntity(id uuid.UUID, password string) *Credential {
 		Password: password,
 	}
 }
-func NewSeller(seller bool) *Credential {
-	return &Credential{
-		Seller: seller,
-	}
-}
 
 // TableName specifies table name for CredentialModel.
 func (model *Credential) TableName() string {
