@@ -16,7 +16,7 @@ type Game struct {
 	Credential *Credential `gorm:"foreignKey:Shop_id"`
 }
 
-type Genre struct {
+type ListGenre struct {
 	Genre string `gorm:"type:varchar;default:false;not_null" json:"genre"`
 }
 
