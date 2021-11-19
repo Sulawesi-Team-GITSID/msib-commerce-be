@@ -34,11 +34,13 @@ func (repo *GameRepository) Insert(ctx context.Context, ent *entity.Game) error 
 	return nil
 }
 
-func (repo *GameRepository) GetListGame(ctx context.Context, limit, offset string) ([]*entity.Game, error) {
-	var models []*entity.Game
+func (repo *GameRepository) GetListGame(ctx context.Context, limit, offset string) ([]*entity.ListGame, error) {
+	var models []*entity.ListGame
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Game{}).
+		Select("game.id", "game.shop_id", "game.nama_game", "game.harga", "genre.name as genre").
+		Joins("inner join genre on game.genre_id = genre.id").Order("game.nama_game desc").
 		Find(&models).
 		Error; err != nil {
 		return nil, errors.Wrap(err, "[GameRepository-FindAll]")

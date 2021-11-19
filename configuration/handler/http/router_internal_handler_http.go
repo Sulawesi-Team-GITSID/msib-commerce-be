@@ -54,7 +54,6 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	//Game
 	engine.POST("/create-game", gameHandler.CreateGame)
 	engine.GET("/list-game", gameHandler.GetListGame)
-	engine.GET("/list-genre", gameHandler.GetListGenre)
 	engine.GET("/list-trend-game", gameHandler.GetListTrendGame)
 	engine.GET("/get-game/:id", gameHandler.GetDetailGame)
 	engine.PUT("/update-game/:id", gameHandler.UpdateGame)

@@ -57,6 +57,13 @@ func (svc ReviewService) Create(ctx context.Context, Review *entity.Review) erro
 		Review.Id = uuid.New()
 	}
 
+	if Review.Rating < 0 {
+		Review.Rating = 1
+	}
+	if Review.Rating > 5 {
+		Review.Rating = 5
+	}
+
 	if err := svc.ReviewRepo.Insert(ctx, Review); err != nil {
 		return errors.Wrap(err, "[ReviewService-Create]")
 	}

@@ -15,7 +15,7 @@ type CreateGameBodyRequest struct {
 	Shop_id  uuid.UUID `json:"shop_id"`
 	NamaGame string    `json:"nama_game"`
 	Harga    int       `json:"harga"`
-	Genre    string    `json:"genre"`
+	Genre_id uuid.UUID `json:"genre_id"`
 }
 
 // GameRowResponse defines all attributes needed to fulfill for Game row entity.
@@ -24,7 +24,7 @@ type GameRowResponse struct {
 	Shop_id  uuid.UUID `json:"shop_id"`
 	NamaGame string    `json:"nama_game"`
 	Harga    int       `json:"harga"`
-	Genre    string    `json:"genre"`
+	Genre_id uuid.UUID `json:"genre_id"`
 }
 
 // GameResponse defines all attributes needed to fulfill for pic Game entity.
@@ -33,7 +33,7 @@ type GameDetailResponse struct {
 	Shop_id  uuid.UUID `json:"shop_id"`
 	NamaGame string    `json:"nama_game"`
 	Harga    int       `json:"harga"`
-	Genre    string    `json:"genre"`
+	Genre_id uuid.UUID `json:"genre_id"`
 }
 
 func buildGameRowResponse(Game *entity.Game) GameRowResponse {
@@ -42,7 +42,7 @@ func buildGameRowResponse(Game *entity.Game) GameRowResponse {
 		Shop_id:  Game.Shop_id,
 		NamaGame: Game.NamaGame,
 		Harga:    Game.Harga,
-		Genre:    Game.Genre,
+		Genre_id: Game.Genre_id,
 	}
 
 	return form
@@ -54,7 +54,7 @@ func buildGameDetailResponse(Game *entity.Game) GameDetailResponse {
 		Shop_id:  Game.Shop_id,
 		NamaGame: Game.NamaGame,
 		Harga:    Game.Harga,
-		Genre:    Game.Genre,
+		Genre_id: Game.Genre_id,
 	}
 
 	return form
@@ -112,7 +112,7 @@ func (handler *GameHandler) CreateGame(echoCtx echo.Context) error {
 		form.Shop_id,
 		form.NamaGame,
 		form.Harga,
-		form.Genre,
+		form.Genre_id,
 	)
 
 	if err := handler.service.Create(echoCtx.Request().Context(), GameEntity); err != nil {
@@ -230,7 +230,7 @@ func (handler *GameHandler) UpdateGame(echoCtx echo.Context) error {
 		form.Shop_id,
 		form.NamaGame,
 		form.Harga,
-		form.Genre,
+		form.Genre_id,
 	)
 
 	if err := handler.service.UpdateGame(echoCtx.Request().Context(), GameEntity); err != nil {
