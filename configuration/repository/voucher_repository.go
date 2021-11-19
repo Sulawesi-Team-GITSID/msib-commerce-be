@@ -46,6 +46,20 @@ func (repo *VoucherRepository) GetListVoucher(ctx context.Context, limit, offset
 	return models, nil
 }
 
+func (repo *VoucherRepository) GetListVoucherShop(ctx context.Context, limit, offset string) ([]*entity.VoucherShop, error) {
+	var models []*entity.VoucherShop
+	if err := repo.db.
+		WithContext(ctx).
+		Model(&entity.Voucher{}).
+		Select("voucher.id", "shop_id", "voucher_name", "harga", "shop.name as shop").
+		Joins("inner join shop on voucher.shop_id = shop.id").Order("voucher_name desc").
+		Find(&models).
+		Error; err != nil {
+		return nil, errors.Wrap(err, "[VoucherRepository-FindAll]")
+	}
+	return models, nil
+}
+
 func (repo *VoucherRepository) GetDetailVoucher(ctx context.Context, ID uuid.UUID) (*entity.Voucher, error) {
 	var models *entity.Voucher
 	if err := repo.db.
@@ -71,7 +85,7 @@ func (repo *VoucherRepository) UpdateVoucher(ctx context.Context, ent *entity.Vo
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Voucher{Id: ent.Id}).
-		Select("nama_voucher", "harga").
+		Select("voucher_name", "harga").
 		Updates(ent).Error; err != nil {
 		return errors.Wrap(err, "[VoucherRepository-Update]")
 	}

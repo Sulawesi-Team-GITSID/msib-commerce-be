@@ -15,7 +15,7 @@ import (
 type CreateVoucherBodyRequest struct {
 	Game_id     uuid.UUID `json:"game_id"`
 	Shop_id     uuid.UUID `json:"shop_id"`
-	VoucherName string    `json:"nama_voucher"`
+	VoucherName string    `json:"voucher_name"`
 	Harga       int       `json:"harga"`
 }
 
@@ -24,7 +24,7 @@ type VoucherRowResponse struct {
 	Id          uuid.UUID `json:"id"`
 	Game_id     uuid.UUID `json:"game_id"`
 	Shop_id     uuid.UUID `json:"shop_id"`
-	VoucherName string    `json:"nama_voucher"`
+	VoucherName string    `json:"voucher_name"`
 	Harga       int       `json:"harga"`
 }
 
@@ -33,7 +33,7 @@ type VoucherDetailResponse struct {
 	Id          uuid.UUID `json:"id"`
 	Game_id     uuid.UUID `json:"game_id"`
 	Shop_id     uuid.UUID `json:"shop_id"`
-	VoucherName string    `json:"nama_voucher"`
+	VoucherName string    `json:"voucher_name"`
 	Harga       int       `json:"harga"`
 }
 
@@ -133,6 +133,23 @@ func (handler *VoucherHandler) GetListVoucher(echoCtx echo.Context) error {
 	}
 
 	Voucher, err := handler.service.GetListVoucher(echoCtx.Request().Context(), form.Limit, form.Offset)
+	if err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
+	}
+	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Voucher)
+	return echoCtx.JSON(res.Status, res)
+
+}
+
+func (handler *VoucherHandler) GetListVoucherShop(echoCtx echo.Context) error {
+	var form QueryParamsVoucher
+	if err := echoCtx.Bind(&form); err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
+
+	Voucher, err := handler.service.GetListVoucherShop(echoCtx.Request().Context(), form.Limit, form.Offset)
 	if err != nil {
 		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)

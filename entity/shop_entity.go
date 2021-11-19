@@ -9,9 +9,9 @@ const (
 // ShopModel is a model for entity.Shop
 type Shop struct {
 	Id            uuid.UUID   `gorm:"type:uuid;primary_key" json:"id"`
-	Credential_id uuid.UUID   `gorm:"type:uuid;primary_key" json:"credential_id"`
+	Credential_id uuid.UUID   `gorm:"type:uuid;not_null" json:"credential_id"`
 	Name          string      `gorm:"type:varchar;not_null;unique" json:"name"`
-	Location      string      `gorm:"type:varchar;not_null;unique" json:"location"`
+	Location      string      `gorm:"type:varchar;not_null" json:"location"`
 	Credential    *Credential `gorm:"foreignKey:Credential_id"`
 }
 
