@@ -21,7 +21,7 @@ func main() {
 	checkError(err)
 
 	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=require",
-		// dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		//dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		config.Database.Host,
 		config.Database.Port,
 		config.Database.Username,
@@ -57,6 +57,8 @@ func main() {
 	log.Info().Msg("  TableModel [" + (&entity.SuperAdmin{}).TableName() + "]")
 	db.AutoMigrate(&entity.Shop{})
 	log.Info().Msg("  TableModel [" + (&entity.Shop{}).TableName() + "]")
+	db.AutoMigrate(&entity.Genre{})
+	log.Info().Msg("  TableModel [" + (&entity.Genre{}).TableName() + "]")
 
 	// db.AutoMigrate(&entity.Users{})
 	// log.Info().Msg("  TableModel [" + (&entity.Users{}).TableName() + "]")

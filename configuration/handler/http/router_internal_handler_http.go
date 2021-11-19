@@ -7,7 +7,7 @@ import (
 // NewGinEngine creates an instance of echo.Engine.
 // gin.Engine already implements net/http.Handler interface.
 
-func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileHandler, gameHandler *GameHandler, voucherHandler *VoucherHandler, verificationHandler *VerificationHandler, Middlewarehandler *Middlewarehandler, reviewHandler *ReviewHandler, superAdminHandler *SuperAdminHandler, shopHandler *ShopHandler, internalUsername, internalPassword string) *echo.Echo {
+func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileHandler, gameHandler *GameHandler, voucherHandler *VoucherHandler, verificationHandler *VerificationHandler, Middlewarehandler *Middlewarehandler, reviewHandler *ReviewHandler, superAdminHandler *SuperAdminHandler, shopHandler *ShopHandler, genreHandler *GenreHandler, internalUsername, internalPassword string) *echo.Echo {
 	engine := echo.New()
 
 	// CORS
@@ -38,6 +38,7 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	//Credential
 	engine.POST("/create-credential", credentialHandler.CreateCredential)
 	engine.GET("/list-credential", credentialHandler.GetListCredential, IsLoggedIn)
+	engine.GET("/get-credential/:id", credentialHandler.GetListCredential)
 	engine.POST("/login", credentialHandler.Login)
 	engine.GET("/verify-account/:id", credentialHandler.UpdateCredentialVerify)
 	engine.PUT("/reset-password/:id", credentialHandler.ForgotPassword)
@@ -53,7 +54,6 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	//Game
 	engine.POST("/create-game", gameHandler.CreateGame)
 	engine.GET("/list-game", gameHandler.GetListGame)
-	engine.GET("/list-genre", gameHandler.GetListGenre)
 	engine.GET("/list-trend-game", gameHandler.GetListTrendGame)
 	engine.GET("/get-game/:id", gameHandler.GetDetailGame)
 	engine.PUT("/update-game/:id", gameHandler.UpdateGame)
@@ -65,6 +65,13 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	engine.GET("/get-voucher/:id", voucherHandler.GetDetailVoucher)
 	engine.PUT("/update-voucher/:id", voucherHandler.UpdateVoucher)
 	engine.DELETE("/delete-voucher/:id", voucherHandler.DeleteVoucher)
+
+	//Genre
+	engine.POST("/create-genre", genreHandler.CreateGenre)
+	engine.GET("/list-genre", genreHandler.GetListGenre)
+	engine.GET("/get-genre/:id", genreHandler.GetDetailGenre)
+	engine.PUT("/update-genre/:id", genreHandler.UpdateGenre)
+	engine.DELETE("/delete-genre/:id", genreHandler.DeleteGenre)
 
 	//Verification
 	engine.POST("/create-verification", verificationHandler.CreateVerification)

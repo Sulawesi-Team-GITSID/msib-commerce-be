@@ -3,7 +3,6 @@ package service
 import (
 	"backend-service/entity"
 	"context"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
@@ -110,9 +109,9 @@ func (svc VerificationService) Verify(ctx context.Context, credential_id string)
 
 	VerificationData, err := svc.VerificationRepo.Verify(ctx, credential_id)
 
-	if VerificationData.Expiresat.Before(time.Now()) {
-		return nil, ErrNilExpired
-	}
+	// if VerificationData.Expiresat.Before(time.Now()) {
+	// 	return nil, ErrNilExpired
+	// }
 
 	if err != nil {
 		return nil, err
