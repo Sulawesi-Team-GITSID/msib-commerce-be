@@ -16,6 +16,11 @@ type Credential struct {
 	Verified bool      `gorm:"type:bool;default:false;not_null" json:"verified"`
 }
 
+type CredentialEmail struct {
+	Id    uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
+	Email string    `gorm:"type:varchar;not_null;unique" json:"email"`
+}
+
 func NewCredential(id uuid.UUID, username, email, password string, seller, verified bool) *Credential {
 	return &Credential{
 		Id:       id,
