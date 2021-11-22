@@ -59,6 +59,10 @@ func main() {
 	log.Info().Msg("  TableModel [" + (&entity.Shop{}).TableName() + "]")
 	db.AutoMigrate(&entity.Genre{})
 	log.Info().Msg("  TableModel [" + (&entity.Genre{}).TableName() + "]")
+	db.AutoMigrate(&entity.Tags{})
+	log.Info().Msg("  TableModel [" + (&entity.Tags{}).TableName() + "]")
+	db.AutoMigrate(&entity.Tags_detail{})
+	log.Info().Msg("  TableModel [" + (&entity.Tags_detail{}).TableName() + "]")
 
 	// db.AutoMigrate(&entity.Users{})
 	// log.Info().Msg("  TableModel [" + (&entity.Users{}).TableName() + "]")
