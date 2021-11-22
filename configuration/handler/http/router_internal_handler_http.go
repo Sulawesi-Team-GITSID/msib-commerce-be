@@ -7,7 +7,7 @@ import (
 // NewGinEngine creates an instance of echo.Engine.
 // gin.Engine already implements net/http.Handler interface.
 
-func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileHandler, gameHandler *GameHandler, voucherHandler *VoucherHandler, verificationHandler *VerificationHandler, Middlewarehandler *Middlewarehandler, reviewHandler *ReviewHandler, superAdminHandler *SuperAdminHandler, shopHandler *ShopHandler, genreHandler *GenreHandler, internalUsername, internalPassword string) *echo.Echo {
+func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileHandler, gameHandler *GameHandler, voucherHandler *VoucherHandler, verificationHandler *VerificationHandler, Middlewarehandler *Middlewarehandler, reviewHandler *ReviewHandler, superAdminHandler *SuperAdminHandler, shopHandler *ShopHandler, genreHandler *GenreHandler, tagsHandler *TagsHandler, internalUsername, internalPassword string) *echo.Echo {
 	engine := echo.New()
 
 	// CORS
@@ -84,6 +84,13 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	//Review
 	engine.POST("/create-review", reviewHandler.CreateReview)
 	engine.GET("/list-review", reviewHandler.GetListReview)
+
+	//Tags
+	engine.POST("/create-tags", tagsHandler.CreateTags)
+	engine.GET("/list-tags", tagsHandler.GetListTags)
+	engine.GET("/get-tags/:id", tagsHandler.GetDetailTags)
+	engine.PUT("/update-tags/:id", tagsHandler.UpdateTags)
+	engine.DELETE("/delete-tags/:id", tagsHandler.DeleteTags)
 
 	return engine
 }
