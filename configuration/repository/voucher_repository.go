@@ -51,7 +51,7 @@ func (repo *VoucherRepository) GetListVoucherShop(ctx context.Context, ID uuid.U
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Voucher{}).
-		Select("voucher.id", "shop_id", "voucher_name", "harga", "shop.name as shop").
+		Select("voucher.id", "game_id", "shop_id", "voucher_name", "harga", "shop.name as shop").
 		Joins("inner join shop on voucher.shop_id = shop.id").Where("shop_id", ID).
 		Order("voucher_name desc").
 		Find(&models).

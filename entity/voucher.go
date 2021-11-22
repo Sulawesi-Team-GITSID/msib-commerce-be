@@ -19,6 +19,7 @@ type Voucher struct {
 
 type VoucherShop struct {
 	Id          uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
+	Game_id     uuid.UUID `gorm:"type:uuid;not_null" json:"game_id"`
 	Shop_id     uuid.UUID `gorm:"type:uuid;not_null" json:"shop_id"`
 	VoucherName string    `gorm:"type:varchar;not_null" json:"voucher_name"`
 	Harga       int       `gorm:"type:int;not_null" json:"harga"`
