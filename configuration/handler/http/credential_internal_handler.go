@@ -51,6 +51,16 @@ type LoginBodyRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
+type SearchEmailRequest struct {
+	Id    uuid.UUID `json:"id" binding:"required"`
+	Email string    `json:"email" binding:"required"`
+}
+
+type SearchEmailResult struct {
+	Id    uuid.UUID `json:"id"`
+	Email string    `json:"email"`
+}
+
 type JWTCustomClaims struct {
 	Username string    `json:"username"`
 	Email    string    `json:"email"`
@@ -263,7 +273,32 @@ func (handler *CredentialHandler) UpdateCredentialVerify(echoCtx echo.Context) e
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", nil)
 	return echoCtx.JSON(res.Status, res)
 }
+func (handler *CredentialHandler) EmailSearch(echoCtx echo.Context) error {
+	var form SearchEmailRequest
+	if err := echoCtx.Bind(&form); err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 
+	}
+
+	emailResult, err := handler.service.EmailSearch(echoCtx.Request().Context(), form.Email)
+	if err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidCredential)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
+	result := &SearchEmailResult{
+		emailResult.Id,
+		emailResult.Email,
+	}
+	if err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
+	}
+
+	var res = entity.NewResponse(nethttp.StatusCreated, "Request processed successfully.", result)
+	forgot_mail(emailResult.Id, emailResult.Email)
+	return echoCtx.JSON(res.Status, res)
+}
 func (handler *CredentialHandler) ForgotPassword(echoCtx echo.Context) error {
 	var form CreateCredentialBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
