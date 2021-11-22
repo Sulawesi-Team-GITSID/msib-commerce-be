@@ -30,6 +30,7 @@ var (
 	ErrFailFindUser = NewAuthError("01-18", "Fail on find user")
 	// ErrInvalidUUIDFormat is returned when the request UUID format is wrong
 	ErrInvalidUUIDFormat = NewAuthError("01-19", "Invalid UUID Format")
+	ErrInvalidNullParam  = NewAuthError("01-20", "No Param detected")
 )
 
 // AuthError represents error happens from authentication service.

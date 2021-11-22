@@ -29,6 +29,7 @@ func NewVoucherService(VoucherRepo VoucherRepository) *VoucherService {
 type VoucherUseCase interface {
 	Create(ctx context.Context, Voucher *entity.Voucher) error
 	GetListVoucher(ctx context.Context, limit, offset string) ([]*entity.Voucher, error)
+	GetListVoucherShop(ctx context.Context, ID uuid.UUID) ([]*entity.VoucherShop, error)
 	GetDetailVoucher(ctx context.Context, ID uuid.UUID) (*entity.Voucher, error)
 	UpdateVoucher(ctx context.Context, Voucher *entity.Voucher) error
 	DeleteVoucher(ctx context.Context, ID uuid.UUID) error
@@ -37,6 +38,7 @@ type VoucherUseCase interface {
 type VoucherRepository interface {
 	Insert(ctx context.Context, Voucher *entity.Voucher) error
 	GetListVoucher(ctx context.Context, limit, offset string) ([]*entity.Voucher, error)
+	GetListVoucherShop(ctx context.Context, ID uuid.UUID) ([]*entity.VoucherShop, error)
 	GetDetailVoucher(ctx context.Context, ID uuid.UUID) (*entity.Voucher, error)
 	UpdateVoucher(ctx context.Context, Voucher *entity.Voucher) error
 	DeleteVoucher(ctx context.Context, ID uuid.UUID) error
@@ -67,10 +69,10 @@ func (svc VoucherService) GetListVoucher(ctx context.Context, limit, offset stri
 	return Voucher, nil
 }
 
-func (svc VoucherService) GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Voucher, error) {
-	Voucher, err := svc.VoucherRepo.GetListVoucher(ctx, limit, offset)
+func (svc VoucherService) GetListVoucherShop(ctx context.Context, ID uuid.UUID) ([]*entity.VoucherShop, error) {
+	Voucher, err := svc.VoucherRepo.GetListVoucherShop(ctx, ID)
 	if err != nil {
-		return nil, errors.Wrap(err, "[VoucherService-GetListGenre]")
+		return nil, errors.Wrap(err, "[VoucherService-GetListVoucherShop]")
 	}
 	return Voucher, nil
 }

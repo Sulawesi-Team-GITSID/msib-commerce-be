@@ -54,6 +54,7 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	//Game
 	engine.POST("/create-game", gameHandler.CreateGame)
 	engine.GET("/list-game", gameHandler.GetListGame)
+	engine.GET("/list-game-shop/:id", gameHandler.GetListGameShop)
 	engine.GET("/list-trend-game", gameHandler.GetListTrendGame)
 	engine.GET("/get-game/:id", gameHandler.GetDetailGame)
 	engine.PUT("/update-game/:id", gameHandler.UpdateGame)
@@ -62,6 +63,7 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	//Voucher
 	engine.POST("/create-voucher", voucherHandler.CreateVoucher)
 	engine.GET("/list-voucher", voucherHandler.GetListVoucher)
+	engine.GET("/list-voucher-shop/:id", voucherHandler.GetListVoucherShop)
 	engine.GET("/get-voucher/:id", voucherHandler.GetDetailVoucher)
 	engine.PUT("/update-voucher/:id", voucherHandler.UpdateVoucher)
 	engine.DELETE("/delete-voucher/:id", voucherHandler.DeleteVoucher)
