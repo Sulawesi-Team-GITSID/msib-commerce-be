@@ -29,7 +29,7 @@ func NewGameService(GameRepo GameRepository) *GameService {
 type GameUseCase interface {
 	Create(ctx context.Context, Game *entity.Game) error
 	GetListGame(ctx context.Context, limit, offset string) ([]*entity.ListGame, error)
-	GetListGameShop(ctx context.Context, limit, offset string) ([]*entity.GameShop, error)
+	GetListGameShop(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error)
 	GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Genre, error)
 	GetListTrendGame(ctx context.Context, limit, offset string) ([]*entity.TrendGame, error)
 	GetDetailGame(ctx context.Context, ID uuid.UUID) (*entity.Game, error)
@@ -40,7 +40,7 @@ type GameUseCase interface {
 type GameRepository interface {
 	Insert(ctx context.Context, Game *entity.Game) error
 	GetListGame(ctx context.Context, limit, offset string) ([]*entity.ListGame, error)
-	GetListGameShop(ctx context.Context, limit, offset string) ([]*entity.GameShop, error)
+	GetListGameShop(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error)
 	GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Genre, error)
 	GetListTrendGame(ctx context.Context, limit, offset string) ([]*entity.TrendGame, error)
 	GetDetailGame(ctx context.Context, ID uuid.UUID) (*entity.Game, error)
@@ -73,8 +73,8 @@ func (svc GameService) GetListGame(ctx context.Context, limit, offset string) ([
 	return Game, nil
 }
 
-func (svc GameService) GetListGameShop(ctx context.Context, limit, offset string) ([]*entity.GameShop, error) {
-	Game, err := svc.GameRepo.GetListGameShop(ctx, limit, offset)
+func (svc GameService) GetListGameShop(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error) {
+	Game, err := svc.GameRepo.GetListGameShop(ctx, ID)
 	if err != nil {
 		return nil, errors.Wrap(err, "[GameService-GetListGame]")
 	}

@@ -143,13 +143,19 @@ func (handler *VoucherHandler) GetListVoucher(echoCtx echo.Context) error {
 }
 
 func (handler *VoucherHandler) GetListVoucherShop(echoCtx echo.Context) error {
-	var form QueryParamsVoucher
-	if err := echoCtx.Bind(&form); err != nil {
+	idParam := echoCtx.Param("id")
+	if len(idParam) == 0 {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidNullParam)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
+
+	id, err := uuid.Parse(idParam)
+	if err != nil {
 		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
-	Voucher, err := handler.service.GetListVoucherShop(echoCtx.Request().Context(), form.Limit, form.Offset)
+	Voucher, err := handler.service.GetListVoucherShop(echoCtx.Request().Context(), id)
 	if err != nil {
 		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
