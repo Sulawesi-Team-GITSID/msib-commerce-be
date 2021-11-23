@@ -47,8 +47,10 @@ func main() {
 	SuperAdminHandler := buildSuperAdminHandler(db)
 	ShopHandler := buildShopHandler(db)
 	GenreHandler := buildGenreHandler(db)
+	TagsHandler := buildTagsHandler(db)
+	Tags_detailHandler := buildTags_detailHandler(db)
 	// usersHandler := buildUsersHandler(db)
-	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, GameHandler, VoucherHandler, VerificationHandler, Middlewarehandler, ReviewHandler, SuperAdminHandler, ShopHandler, GenreHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, GameHandler, VoucherHandler, VerificationHandler, Middlewarehandler, ReviewHandler, SuperAdminHandler, ShopHandler, GenreHandler, TagsHandler, Tags_detailHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
 
 	server := &nethttp.Server{
 		Addr:    fmt.Sprintf(":%s", cfg.Port),
@@ -162,4 +164,16 @@ func buildGenreHandler(db *gorm.DB) *http.GenreHandler {
 	repo := repository.NewGenreRepository(db)
 	GenreService := service.NewGenreService(repo)
 	return http.NewGenreHandler(GenreService)
+}
+
+func buildTagsHandler(db *gorm.DB) *http.TagsHandler {
+	repo := repository.NewTagsRepository(db)
+	TagsService := service.NewTagsService(repo)
+	return http.NewTagsHandler(TagsService)
+}
+
+func buildTags_detailHandler(db *gorm.DB) *http.Tags_detailHandler {
+	repo := repository.NewTags_detailRepository(db)
+	Tags_detailService := service.NewTags_detailService(repo)
+	return http.NewTags_detailHandler(Tags_detailService)
 }
