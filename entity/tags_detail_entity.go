@@ -14,6 +14,11 @@ type Tags_detail struct {
 	Tags    *Tags     `gorm:"foreignKey:Tags_id"`
 }
 
+type GameTags struct {
+	Game_id uuid.UUID `gorm:"type:uuid;not_null" json:"game_id"`
+	Tags    string    `gorm:"type:uuid;not_null" json:"tags"`
+}
+
 func NewTags_detail(game_id, tags_id uuid.UUID) *Tags_detail {
 	return &Tags_detail{
 		Game_id: game_id,

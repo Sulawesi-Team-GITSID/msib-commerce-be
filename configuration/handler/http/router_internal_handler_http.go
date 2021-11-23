@@ -7,7 +7,7 @@ import (
 // NewGinEngine creates an instance of echo.Engine.
 // gin.Engine already implements net/http.Handler interface.
 
-func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileHandler, gameHandler *GameHandler, voucherHandler *VoucherHandler, verificationHandler *VerificationHandler, Middlewarehandler *Middlewarehandler, reviewHandler *ReviewHandler, superAdminHandler *SuperAdminHandler, shopHandler *ShopHandler, genreHandler *GenreHandler, tagsHandler *TagsHandler, internalUsername, internalPassword string) *echo.Echo {
+func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileHandler, gameHandler *GameHandler, voucherHandler *VoucherHandler, verificationHandler *VerificationHandler, Middlewarehandler *Middlewarehandler, reviewHandler *ReviewHandler, superAdminHandler *SuperAdminHandler, shopHandler *ShopHandler, genreHandler *GenreHandler, tagsHandler *TagsHandler, tags_detailHandler *Tags_detailHandler, internalUsername, internalPassword string) *echo.Echo {
 	engine := echo.New()
 
 	// CORS
@@ -91,6 +91,14 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	engine.GET("/get-tags/:id", tagsHandler.GetDetailTags)
 	engine.PUT("/update-tags/:id", tagsHandler.UpdateTags)
 	engine.DELETE("/delete-tags/:id", tagsHandler.DeleteTags)
+
+	//Tags_detail
+	engine.POST("/create-gametags", tags_detailHandler.CreateTags_detail)
+	engine.GET("/list-gametags", tags_detailHandler.GetListTags_detail)
+	// engine.GET("/get-gametags/:id", tags_detailHandler.GetDetailTags_detail)
+	engine.GET("/get-gametags/:id", tags_detailHandler.GetGameTags)
+	engine.PUT("/update-gametags/:id", tags_detailHandler.UpdateTags_detail)
+	engine.DELETE("/delete-gametags/:id", tags_detailHandler.DeleteTags_detail)
 
 	return engine
 }
