@@ -8,7 +8,7 @@ const (
 
 // GameModel is a model for entity.Game
 type Game struct {
-	Id       uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
+	Id       uuid.UUID `gorm:"type:uuid;primary_key;unique" json:"id"`
 	Shop_id  uuid.UUID `gorm:"type:uuid;not_null" json:"shop_id"`
 	NamaGame string    `gorm:"type:varchar;not_null" json:"nama_game"`
 	Harga    int       `gorm:"type:int;not_null" json:"harga"`
@@ -22,18 +22,18 @@ type ListGenre struct {
 }
 
 type ListGame struct {
-	Id       uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
-	Shop_id  uuid.UUID `gorm:"type:uuid;not_null" json:"shop_id"`
-	NamaGame string    `gorm:"type:varchar;not_null" json:"nama_game"`
-	Harga    int       `gorm:"type:int;not_null" json:"harga"`
-	Genre    string    `gorm:"type:varchar;not_null" json:"genre"`
+	Id       uuid.UUID `json:"id"`
+	Shop_id  uuid.UUID `json:"shop_id"`
+	NamaGame string    `json:"nama_game"`
+	Harga    int       `json:"harga"`
+	Genre    string    `json:"genre"`
 }
 
 type TrendGame struct {
-	Id       uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
-	NamaGame string    `gorm:"type:varchar;not_null" json:"nama_game"`
-	Harga    int       `gorm:"type:int;not_null" json:"harga"`
-	Rating   float64   `gorm:"type:numeric;not_null" json:"rating"`
+	Id       uuid.UUID `json:"id"`
+	NamaGame string    `json:"nama_game"`
+	Harga    int       `json:"harga"`
+	Rating   float64   `json:"rating"`
 }
 
 func NewGame(id, shop_id uuid.UUID, nama_game string, harga int, genre_id uuid.UUID) *Game {
