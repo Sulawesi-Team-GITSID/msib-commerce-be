@@ -36,6 +36,11 @@ type GameDetailResponse struct {
 	Genre_id uuid.UUID `json:"genre_id"`
 }
 
+// Defines request form for search function
+type SearchBodyRequest struct {
+	Search string `json:"search" binding:"required"`
+}
+
 func buildGameRowResponse(Game *entity.Game) GameRowResponse {
 	form := GameRowResponse{
 		Id:       Game.Id,
@@ -195,6 +200,29 @@ func (handler *GameHandler) GetDetailGame(echoCtx echo.Context) error {
 	}
 
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Game)
+	return echoCtx.JSON(res.Status, res)
+}
+
+func (handler *GameHandler) SearchGame(echoCtx echo.Context) error {
+	var form SearchBodyRequest
+	if err := echoCtx.Bind(&form); err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+
+	}
+
+	searchResult, err := handler.service.SearchGame(echoCtx.Request().Context(), form.Search)
+	if err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidCredential)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
+
+	if err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
+	}
+
+	var res = entity.NewResponse(nethttp.StatusCreated, "Request processed successfully.", searchResult)
 	return echoCtx.JSON(res.Status, res)
 }
 

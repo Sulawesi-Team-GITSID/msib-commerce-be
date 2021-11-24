@@ -21,6 +21,7 @@ type ListGenre struct {
 	Genre string `gorm:"type:varchar;default:false;not_null" json:"genre"`
 }
 
+// ListGame struct is a model for collecting query genre.name
 type ListGame struct {
 	Id       uuid.UUID `json:"id"`
 	Shop_id  uuid.UUID `json:"shop_id"`

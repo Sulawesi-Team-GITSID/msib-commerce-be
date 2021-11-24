@@ -87,6 +87,21 @@ func (repo *GameRepository) GetDetailGame(ctx context.Context, ID uuid.UUID) (*e
 	return models, nil
 }
 
+func (repo *GameRepository) SearchGame(ctx context.Context, search string) ([]*entity.ListGame, error) {
+	var models []*entity.ListGame
+	if err := repo.db.
+		WithContext(ctx).
+		Model(&entity.Game{}).
+		Select("game.id", "game.shop_id", "game.nama_game", "game.harga", "genre.name as genre").
+		Joins("inner join genre on game.genre_id = genre.id").
+		Where("lower(nama_game) LIKE lower('%" + search + "%')").Order("game.nama_game desc").
+		Find(&models).
+		Error; err != nil {
+		return nil, errors.Wrap(err, "[GameRepository-FindAll]")
+	}
+	return models, nil
+}
+
 func (repo *GameRepository) DeleteGame(ctx context.Context, ID uuid.UUID) error {
 	if err := repo.db.
 		WithContext(ctx).
