@@ -13,6 +13,7 @@ type Game struct {
 	NamaGame string    `gorm:"type:varchar;not_null" json:"nama_game"`
 	Harga    int       `gorm:"type:int;not_null" json:"harga"`
 	Genre_id uuid.UUID `gorm:"type:uuid;not_null" json:"genre_id"`
+	Deleted  bool      `gorm:"type:bool;default:false;not_null" json:"deleted"`
 	Shop     *Shop     `gorm:"foreignKey:Shop_id"`
 	Genre    *Genre    `gorm:"foreignKey:Genre_id"`
 }
@@ -37,13 +38,14 @@ type TrendGame struct {
 	Rating   float64   `json:"rating"`
 }
 
-func NewGame(id, shop_id uuid.UUID, nama_game string, harga int, genre_id uuid.UUID) *Game {
+func NewGame(id, shop_id uuid.UUID, nama_game string, harga int, genre_id uuid.UUID, deleted bool) *Game {
 	return &Game{
 		Id:       id,
 		Shop_id:  shop_id,
 		NamaGame: nama_game,
 		Harga:    harga,
 		Genre_id: genre_id,
+		Deleted:  deleted,
 	}
 }
 

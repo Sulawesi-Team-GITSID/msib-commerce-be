@@ -118,6 +118,7 @@ func (handler *GameHandler) CreateGame(echoCtx echo.Context) error {
 		form.NamaGame,
 		form.Harga,
 		form.Genre_id,
+		false,
 	)
 
 	if err := handler.service.Create(echoCtx.Request().Context(), GameEntity); err != nil {
@@ -259,6 +260,7 @@ func (handler *GameHandler) UpdateGame(echoCtx echo.Context) error {
 		form.NamaGame,
 		form.Harga,
 		form.Genre_id,
+		false,
 	)
 
 	if err := handler.service.UpdateGame(echoCtx.Request().Context(), GameEntity); err != nil {

@@ -40,7 +40,8 @@ func (repo *GameRepository) GetListGame(ctx context.Context, limit, offset strin
 		WithContext(ctx).
 		Model(&entity.Game{}).
 		Select("game.id", "game.shop_id", "game.nama_game", "game.harga", "genre.name as genre").
-		Joins("inner join genre on game.genre_id = genre.id").Order("game.nama_game desc").
+		Joins("inner join genre on game.genre_id = genre.id").Where("game.deleted", false).
+		Order("game.nama_game desc").
 		Find(&models).
 		Error; err != nil {
 		return nil, errors.Wrap(err, "[GameRepository-FindAll]")
@@ -94,7 +95,7 @@ func (repo *GameRepository) SearchGame(ctx context.Context, search string) ([]*e
 		Model(&entity.Game{}).
 		Select("game.id", "game.shop_id", "game.nama_game", "game.harga", "genre.name as genre").
 		Joins("inner join genre on game.genre_id = genre.id").
-		Where("lower(nama_game) LIKE lower('%" + search + "%')").Order("game.nama_game desc").
+		Where("lower(nama_game) LIKE lower('%" + search + "%') AND game.deleted = false").Order("game.nama_game desc").
 		Find(&models).
 		Error; err != nil {
 		return nil, errors.Wrap(err, "[GameRepository-FindAll]")
@@ -105,7 +106,8 @@ func (repo *GameRepository) SearchGame(ctx context.Context, search string) ([]*e
 func (repo *GameRepository) DeleteGame(ctx context.Context, ID uuid.UUID) error {
 	if err := repo.db.
 		WithContext(ctx).
-		Delete(&entity.Game{Id: ID}).Error; err != nil {
+		Model(&entity.Game{}).Where("id = ?", ID).
+		Update("deleted", true).Error; err != nil {
 		return errors.Wrap(err, "[GameRepository-Delete]")
 	}
 	return nil

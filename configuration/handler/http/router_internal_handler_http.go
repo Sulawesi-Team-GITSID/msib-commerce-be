@@ -102,6 +102,7 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 
 	//searching
 	engine.POST("/search-game", gameHandler.SearchGame)
+	engine.POST("/search-shop", shopHandler.SearchShop)
 
 	return engine
 }
