@@ -85,7 +85,7 @@ func (svc CredentialService) Login(ctx context.Context, email string, password s
 	CredentialData, err := svc.CredentialRepo.Login(ctx, email, password)
 
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "[Login-Credential]")
 	}
 
 	return CredentialData, nil
