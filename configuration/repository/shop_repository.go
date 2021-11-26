@@ -46,6 +46,18 @@ func (repo *ShopRepository) GetListShop(ctx context.Context, limit, offset strin
 	return models, nil
 }
 
+func (repo *ShopRepository) SearchShop(ctx context.Context, search string) ([]*entity.Shop, error) {
+	var models []*entity.Shop
+	if err := repo.db.
+		WithContext(ctx).
+		Model(&entity.Shop{}).Where("lower(name) LIKE lower('%" + search + "%')").
+		Find(&models).
+		Error; err != nil {
+		return nil, errors.Wrap(err, "[ShopRepository-FindAll]")
+	}
+	return models, nil
+}
+
 func (repo *ShopRepository) GetDetailShop(ctx context.Context, ID uuid.UUID) (*entity.Shop, error) {
 	var models *entity.Shop
 	if err := repo.db.

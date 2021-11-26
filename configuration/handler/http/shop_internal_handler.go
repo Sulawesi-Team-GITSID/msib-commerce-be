@@ -159,6 +159,29 @@ func (handler *ShopHandler) GetDetailShop(echoCtx echo.Context) error {
 	return echoCtx.JSON(res.Status, res)
 }
 
+func (handler *ShopHandler) SearchShop(echoCtx echo.Context) error {
+	var form SearchBodyRequest
+	if err := echoCtx.Bind(&form); err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+
+	}
+
+	searchResult, err := handler.service.SearchShop(echoCtx.Request().Context(), form.Search)
+	if err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidCredential)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
+
+	if err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
+	}
+
+	var res = entity.NewResponse(nethttp.StatusCreated, "Request processed successfully.", searchResult)
+	return echoCtx.JSON(res.Status, res)
+}
+
 func (handler *ShopHandler) UpdateShop(echoCtx echo.Context) error {
 	var form CreateShopBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
