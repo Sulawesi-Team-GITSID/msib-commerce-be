@@ -1,6 +1,8 @@
 package entity
 
-import "github.com/google/uuid"
+import (
+	"github.com/google/uuid"
+)
 
 const (
 	GenreTableName = "genre"
@@ -8,14 +10,16 @@ const (
 
 // GenreModel is a model for entity.Genre
 type Genre struct {
-	Id   uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
-	Name string    `gorm:"type:varchar;not_null;unique" json:"name"`
+	Id      uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
+	Name    string    `gorm:"type:varchar;not_null;unique" json:"name"`
+	Deleted bool      `gorm:"type:bool;default:false;not_null" json:"deleted"`
 }
 
-func NewGenre(id uuid.UUID, name string) *Genre {
+func NewGenre(id uuid.UUID, name string, deleted bool) *Genre {
 	return &Genre{
-		Id:   id,
-		Name: name,
+		Id:      id,
+		Name:    name,
+		Deleted: deleted,
 	}
 }
 

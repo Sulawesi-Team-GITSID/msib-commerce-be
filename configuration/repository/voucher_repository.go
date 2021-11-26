@@ -34,11 +34,14 @@ func (repo *VoucherRepository) Insert(ctx context.Context, ent *entity.Voucher) 
 	return nil
 }
 
-func (repo *VoucherRepository) GetListVoucher(ctx context.Context, limit, offset string) ([]*entity.Voucher, error) {
-	var models []*entity.Voucher
+func (repo *VoucherRepository) GetListVoucher(ctx context.Context, limit, offset string) ([]*entity.ListVoucher, error) {
+	var models []*entity.ListVoucher
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Voucher{}).
+		Select("voucher.id, voucher.game_id, game.nama_game as game_name, voucher.shop_id, shop.name as shop_name, voucher.voucher_name, voucher.harga").
+		Joins("join game on voucher.game_id = game.id join shop on shop.id = voucher.shop_id").
+		Where("voucher.deleted", false).
 		Find(&models).
 		Error; err != nil {
 		return nil, errors.Wrap(err, "[VoucherRepository-FindAll]")
@@ -73,10 +76,26 @@ func (repo *VoucherRepository) GetDetailVoucher(ctx context.Context, ID uuid.UUI
 	return models, nil
 }
 
+func (repo *VoucherRepository) SearchVoucher(ctx context.Context, search string) ([]*entity.ListVoucher, error) {
+	var models []*entity.ListVoucher
+	if err := repo.db.
+		WithContext(ctx).
+		Model(&entity.Voucher{}).
+		Select("voucher.id, voucher.game_id, game.nama_game as game_name, voucher.shop_id, shop.name as shop_name, voucher.voucher_name, voucher.harga").
+		Joins("join game on voucher.game_id = game.id join shop on shop.id = voucher.shop_id").
+		Where("lower(voucher_name) LIKE lower('%" + search + "%') AND voucher.deleted = false").
+		Find(&models).
+		Error; err != nil {
+		return nil, errors.Wrap(err, "[VoucherRepository-FindAll]")
+	}
+	return models, nil
+}
+
 func (repo *VoucherRepository) DeleteVoucher(ctx context.Context, ID uuid.UUID) error {
 	if err := repo.db.
 		WithContext(ctx).
-		Delete(&entity.Voucher{Id: ID}).Error; err != nil {
+		Model(&entity.Voucher{}).Where("id = ?", ID).
+		Update("deleted", true).Error; err != nil {
 		return errors.Wrap(err, "[VoucherRepository-Delete]")
 	}
 	return nil

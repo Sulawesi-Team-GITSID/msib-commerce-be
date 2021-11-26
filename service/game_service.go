@@ -33,6 +33,7 @@ type GameUseCase interface {
 	GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Genre, error)
 	GetListTrendGame(ctx context.Context, limit, offset string) ([]*entity.TrendGame, error)
 	GetDetailGame(ctx context.Context, ID uuid.UUID) (*entity.Game, error)
+	SearchGame(ctx context.Context, search string) ([]*entity.ListGame, error)
 	UpdateGame(ctx context.Context, Game *entity.Game) error
 	DeleteGame(ctx context.Context, ID uuid.UUID) error
 }
@@ -44,6 +45,7 @@ type GameRepository interface {
 	GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Genre, error)
 	GetListTrendGame(ctx context.Context, limit, offset string) ([]*entity.TrendGame, error)
 	GetDetailGame(ctx context.Context, ID uuid.UUID) (*entity.Game, error)
+	SearchGame(ctx context.Context, search string) ([]*entity.ListGame, error)
 	UpdateGame(ctx context.Context, Game *entity.Game) error
 	DeleteGame(ctx context.Context, ID uuid.UUID) error
 }
@@ -65,11 +67,12 @@ func (svc GameService) Create(ctx context.Context, Game *entity.Game) error {
 	return nil
 }
 
-func (svc GameService) GetListGame(ctx context.Context, limit, offset string) ([]*entity.ListGame, error) {
-	Game, err := svc.GameRepo.GetListGame(ctx, limit, offset)
+func (svc GameService) SearchGame(ctx context.Context, search string) ([]*entity.ListGame, error) {
+	Game, err := svc.GameRepo.SearchGame(ctx, search)
 	if err != nil {
-		return nil, errors.Wrap(err, "[GameService-GetListGame]")
+		return nil, errors.Wrap(err, "[GameService-SearchGame]")
 	}
+
 	return Game, nil
 }
 
@@ -101,6 +104,14 @@ func (svc GameService) GetDetailGame(ctx context.Context, ID uuid.UUID) (*entity
 	Game, err := svc.GameRepo.GetDetailGame(ctx, ID)
 	if err != nil {
 		return nil, errors.Wrap(err, "[GameService-GetDetailGame]")
+	}
+	return Game, nil
+}
+
+func (svc GameService) GetListGame(ctx context.Context, limit, offset string) ([]*entity.ListGame, error) {
+	Game, err := svc.GameRepo.GetListGame(ctx, limit, offset)
+	if err != nil {
+		return nil, errors.Wrap(err, "[GameService-GetListGame]")
 	}
 	return Game, nil
 }
