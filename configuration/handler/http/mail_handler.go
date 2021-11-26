@@ -5,8 +5,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/google/uuid"
-
 	"gopkg.in/gomail.v2"
 )
 
@@ -60,37 +58,10 @@ func verify_mail(form VerifyResult) {
 	mailer.SetHeader("To", form.Email, "voucherlabs.official@gmail.com")
 	mailer.SetAddressHeader("Cc", "voucherlabs.official@gmail.com", "Tra Lala La")
 	mailer.SetHeader("Subject", "Code Verification")
-	link = os.Getenv("RUNNING_HOST") + "verify-mail/" + form.Credential_id.String()
+	link = os.Getenv("RUNNING_HOST") + form.Credential_id.String()
 	text = "Please, click this link before " + form.Expiresat.Format(time.RFC1123)
 
 	mailer.SetBody("text/html", "Here's your verification link, click link<br><a href='"+link+"'>Click here</a><br>"+text)
-
-	dialer := gomail.NewDialer(
-		CONFIG_SMTP_HOST,
-		CONFIG_SMTP_PORT,
-		CONFIG_AUTH_EMAIL,
-		CONFIG_AUTH_PASSWORD,
-	)
-
-	err := dialer.DialAndSend(mailer)
-	if err != nil {
-		log.Print(dialer)
-		log.Fatal(err.Error())
-	}
-
-	log.Println("Mail sent!")
-}
-
-func forgot_mail(id uuid.UUID, email string) {
-	var link, text string
-	mailer := gomail.NewMessage()
-	mailer.SetHeader("From", CONFIG_SENDER_NAME)
-	mailer.SetHeader("To", email, "voucherlabs.official@gmail.com")
-	mailer.SetAddressHeader("Cc", "voucherlabs.official@gmail.com", "Tra Lala La")
-	mailer.SetHeader("Subject", "Code Verification")
-	link = os.Getenv("RUNNING_HOST") + "reset-password/" + id.String()
-
-	mailer.SetBody("text/html", "Please click this link to reset your password<br><a href='"+link+"'>Click here</a><br>"+text)
 
 	dialer := gomail.NewDialer(
 		CONFIG_SMTP_HOST,

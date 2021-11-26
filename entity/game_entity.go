@@ -31,14 +31,6 @@ type ListGame struct {
 	Genre    string    `json:"genre"`
 }
 
-type GameShop struct {
-	Id       uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
-	Shop_id  uuid.UUID `gorm:"type:uuid;not_null" json:"shop_id"`
-	NamaGame string    `gorm:"type:varchar;not_null" json:"nama_game"`
-	Harga    int       `gorm:"type:int;not_null" json:"harga"`
-	Shop     string    `gorm:"type:varchar;not_null" json:"shop"`
-}
-
 type TrendGame struct {
 	Id       uuid.UUID `json:"id"`
 	NamaGame string    `json:"nama_game"`

@@ -33,7 +33,6 @@ type CredentialUseCase interface {
 	GetListCredential(ctx context.Context, limit, offset string) ([]*entity.Credential, error)
 	GetDetailCredential(ctx context.Context, ID uuid.UUID) (*entity.Credential, error)
 	UpdateCredentialVerify(ctx context.Context, Credential *entity.Credential) error
-	EmailSearch(ctx context.Context, email string) (*entity.CredentialEmail, error)
 	ForgotPassword(ctx context.Context, Credential *entity.Credential) error
 }
 
@@ -43,7 +42,6 @@ type CredentialRepository interface {
 	GetListCredential(ctx context.Context, limit, offset string) ([]*entity.Credential, error)
 	GetDetailCredential(ctx context.Context, ID uuid.UUID) (*entity.Credential, error)
 	UpdateCredentialVerify(ctx context.Context, Credential *entity.Credential) error
-	EmailSearch(ctx context.Context, email string) (*entity.CredentialEmail, error)
 	ForgotPassword(ctx context.Context, Credential *entity.Credential) error
 }
 
@@ -108,17 +106,6 @@ func (svc CredentialService) UpdateCredentialVerify(ctx context.Context, Credent
 		return errors.Wrap(err, "[CredentialService-UpdateCredential]")
 	}
 	return nil
-}
-
-func (svc CredentialService) EmailSearch(ctx context.Context, email string) (*entity.CredentialEmail, error) {
-
-	CredentialData, err := svc.CredentialRepo.EmailSearch(ctx, email)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return CredentialData, nil
 }
 
 func (svc CredentialService) ForgotPassword(ctx context.Context, Credential *entity.Credential) error {

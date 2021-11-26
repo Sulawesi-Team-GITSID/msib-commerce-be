@@ -54,7 +54,7 @@ func (repo *CredentialRepository) Login(ctx context.Context, email string, passw
 		Where(`password`, password).
 		First(&models).
 		Error; err != nil {
-		return nil, errors.Wrap(err, "[CredentialRepository-Login]")
+		return nil, errors.Wrap(err, "[UsersRepository-Login]")
 	}
 	return models, nil
 }
@@ -80,18 +80,7 @@ func (repo *CredentialRepository) GetDetailCredential(ctx context.Context, ID uu
 	}
 	return models, nil
 }
-func (repo *CredentialRepository) EmailSearch(ctx context.Context, email string) (*entity.CredentialEmail, error) {
-	var models *entity.CredentialEmail
-	if err := repo.db.
-		WithContext(ctx).
-		Model(&entity.Credential{}).
-		Where(`email`, email).
-		First(&models).
-		Error; err != nil {
-		return nil, errors.Wrap(err, "[CredentialRepository-SearchEmail]")
-	}
-	return models, nil
-}
+
 func (repo *CredentialRepository) ForgotPassword(ctx context.Context, ent *entity.Credential) error {
 	if err := repo.db.
 		WithContext(ctx).
