@@ -41,21 +41,3 @@ CREATE TRIGGER trigger_seller
   ON shop
   FOR EACH ROW
   EXECUTE PROCEDURE seller_function();
-
-/* for audit only */
-CREATE FUNCTION audits_function() 
-   RETURNS TRIGGER 
-   LANGUAGE PLPGSQL
-AS $$
-BEGIN
-	INSERT INTO audits(table_name, action_name, changed_on)
-         VALUES(TG_TABLE_NAME, TG_OP, now());
-    RETURN NEW;
-END;
-$$
-
-CREATE TRIGGER audits_genre
-  AFTER INSERT OR UPDATE OR DELETE
-  ON genre
-  FOR EACH ROW
-  EXECUTE PROCEDURE audits_function();

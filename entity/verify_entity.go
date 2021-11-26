@@ -20,10 +20,10 @@ type Verification struct {
 }
 
 type Getcode struct {
-	Credential_id uuid.UUID `json:"credential_id"`
-	Code          string    `json:"code"`
-	Expiresat     time.Time `json:"expiresat"`
-	Email         string    `json:"email"`
+	Credential_id uuid.UUID `gorm:"type:uuid;not_null" json:"credential_id"`
+	Code          string    `gorm:"type:varchar;not_null;unique" json:"code"`
+	Expiresat     time.Time `gorm:"type:date;not_null" json:"expiresat"`
+	Email         string    `gorm:"type:varchar;not_null;unique" json:"email"`
 }
 
 func NewVerification(id, credential_id uuid.UUID, code string, expiresat time.Time) *Verification {

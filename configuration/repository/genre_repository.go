@@ -38,7 +38,7 @@ func (repo *GenreRepository) GetListGenre(ctx context.Context, limit, offset str
 	var models []*entity.Genre
 	if err := repo.db.
 		WithContext(ctx).
-		Model(&entity.Genre{}).Where("deleted", false).
+		Model(&entity.Genre{}).
 		Find(&models).
 		Error; err != nil {
 		return nil, errors.Wrap(err, "[GenreRepository-FindAll]")
@@ -61,8 +61,7 @@ func (repo *GenreRepository) GetDetailGenre(ctx context.Context, ID uuid.UUID) (
 func (repo *GenreRepository) DeleteGenre(ctx context.Context, ID uuid.UUID) error {
 	if err := repo.db.
 		WithContext(ctx).
-		Model(&entity.Genre{}).Where("id = ?", ID).
-		Update("deleted", true).Error; err != nil {
+		Delete(&entity.Genre{Id: ID}).Error; err != nil {
 		return errors.Wrap(err, "[GenreRepository-Delete]")
 	}
 	return nil

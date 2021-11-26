@@ -8,7 +8,7 @@ const (
 
 // TagsModel is a model for entity.Tags
 type Tags struct {
-	Id   uuid.UUID `gorm:"type:uuid;primary_key;unique" json:"id"`
+	Id   uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
 	Name string    `gorm:"type:varchar;not_null;unique" json:"name"`
 }
 

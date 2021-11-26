@@ -30,7 +30,6 @@ type ShopUseCase interface {
 	Create(ctx context.Context, Shop *entity.Shop) error
 	GetListShop(ctx context.Context, limit, offset string) ([]*entity.Shop, error)
 	GetDetailShop(ctx context.Context, ID uuid.UUID) (*entity.Shop, error)
-	SearchShop(ctx context.Context, search string) ([]*entity.Shop, error)
 	UpdateShop(ctx context.Context, Shop *entity.Shop) error
 	DeleteShop(ctx context.Context, ID uuid.UUID) error
 }
@@ -39,7 +38,6 @@ type ShopRepository interface {
 	Insert(ctx context.Context, Shop *entity.Shop) error
 	GetListShop(ctx context.Context, limit, offset string) ([]*entity.Shop, error)
 	GetDetailShop(ctx context.Context, ID uuid.UUID) (*entity.Shop, error)
-	SearchShop(ctx context.Context, search string) ([]*entity.Shop, error)
 	UpdateShop(ctx context.Context, Shop *entity.Shop) error
 	DeleteShop(ctx context.Context, ID uuid.UUID) error
 }
@@ -82,15 +80,6 @@ func (svc ShopService) GetDetailShop(ctx context.Context, ID uuid.UUID) (*entity
 	if err != nil {
 		return nil, errors.Wrap(err, "[ShopService-GetDetailShop]")
 	}
-	return Shop, nil
-}
-
-func (svc ShopService) SearchShop(ctx context.Context, search string) ([]*entity.Shop, error) {
-	Shop, err := svc.ShopRepo.SearchShop(ctx, search)
-	if err != nil {
-		return nil, errors.Wrap(err, "[ShopService-SearchShop]")
-	}
-
 	return Shop, nil
 }
 

@@ -100,10 +100,5 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	engine.PUT("/update-gametags/:id", tags_detailHandler.UpdateTags_detail)
 	engine.DELETE("/delete-gametags/:id", tags_detailHandler.DeleteTags_detail)
 
-	//searching
-	engine.POST("/search-game", gameHandler.SearchGame)
-	engine.POST("/search-shop", shopHandler.SearchShop)
-	engine.POST("/search-voucher", voucherHandler.SearchVoucher)
-
 	return engine
 }

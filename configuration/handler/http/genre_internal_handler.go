@@ -96,7 +96,6 @@ func (handler *GenreHandler) CreateGenre(echoCtx echo.Context) error {
 	GenreEntity := entity.NewGenre(
 		uuid.Nil,
 		form.Name,
-		false,
 	)
 
 	if err := handler.service.Create(echoCtx.Request().Context(), GenreEntity); err != nil {
@@ -178,7 +177,6 @@ func (handler *GenreHandler) UpdateGenre(echoCtx echo.Context) error {
 	GenreEntity := entity.NewGenre(
 		id,
 		form.Name,
-		false,
 	)
 
 	if err := handler.service.UpdateGenre(echoCtx.Request().Context(), GenreEntity); err != nil {
