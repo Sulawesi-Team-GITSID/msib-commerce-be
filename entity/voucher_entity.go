@@ -28,6 +28,15 @@ type ListVoucher struct {
 	Harga        int       `json:"harga"`
 }
 
+type VoucherShop struct {
+	Id          uuid.UUID `json:"id"`
+	Game_id     uuid.UUID `json:"game_id"`
+	Shop_id     uuid.UUID `json:"shop_id"`
+	VoucherName string    `json:"voucher_name"`
+	Harga       int       `json:"harga"`
+	Shop        string    `json:"shop"`
+}
+
 func NewVoucher(id, game_id, shop_id uuid.UUID, voucher_name string, harga int, deleted bool) *Voucher {
 	return &Voucher{
 		Id:           id,

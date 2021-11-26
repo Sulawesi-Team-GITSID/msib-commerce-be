@@ -31,6 +31,14 @@ type ListGame struct {
 	Genre    string    `json:"genre"`
 }
 
+type GameShop struct {
+	Id       uuid.UUID `json:"id"`
+	Shop_id  uuid.UUID `json:"shop_id"`
+	NamaGame string    `json:"nama_game"`
+	Harga    int       `json:"harga"`
+	Shop     string    `json:"shop"`
+}
+
 type TrendGame struct {
 	Id       uuid.UUID `json:"id"`
 	NamaGame string    `json:"nama_game"`
