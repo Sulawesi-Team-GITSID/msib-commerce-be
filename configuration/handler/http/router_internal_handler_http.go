@@ -41,6 +41,7 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	engine.GET("/get-credential/:id", credentialHandler.GetListCredential)
 	engine.POST("/login", credentialHandler.Login)
 	engine.GET("/verify-account/:id", credentialHandler.UpdateCredentialVerify)
+	engine.POST("/search-email", credentialHandler.EmailSearch)
 	engine.PUT("/reset-password/:id", credentialHandler.ForgotPassword)
 	// engine.GET("/private", JWThandler.Private)
 
