@@ -170,6 +170,54 @@ func (handler *GameHandler) GetListGameShop(echoCtx echo.Context) error {
 
 }
 
+func (handler *GameHandler) SortGame(echoCtx echo.Context) error {
+	OrderParam := echoCtx.Param("order")
+	// var order string = OrderParam
+	if len(OrderParam) == 0 {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidNullParam)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
+
+	SortParam := echoCtx.Param("sort")
+	// var sort string = SortParam
+	if len(SortParam) == 0 {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidNullParam)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
+
+	Game, err := handler.service.SortGame(echoCtx.Request().Context(), OrderParam, SortParam)
+	if err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
+	}
+	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Game)
+	return echoCtx.JSON(res.Status, res)
+
+}
+
+func (handler *GameHandler) SortByDesc(echoCtx echo.Context) error {
+	idParam := echoCtx.Param("id")
+	if len(idParam) == 0 {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidNullParam)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
+
+	id, err := uuid.Parse(idParam)
+	if err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
+
+	Game, err := handler.service.SortByDesc(echoCtx.Request().Context(), id)
+	if err != nil {
+		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
+		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
+	}
+	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Game)
+	return echoCtx.JSON(res.Status, res)
+
+}
+
 func (handler *GameHandler) GetListGenre(echoCtx echo.Context) error {
 	var form QueryParamsGame
 	if err := echoCtx.Bind(&form); err != nil {
