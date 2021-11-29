@@ -30,6 +30,8 @@ type GameUseCase interface {
 	Create(ctx context.Context, Game *entity.Game) error
 	GetListGame(ctx context.Context, limit, offset string) ([]*entity.ListGame, error)
 	GetListGameShop(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error)
+	SortByAsc(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error)
+	SortByDesc(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error)
 	GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Genre, error)
 	GetListTrendGame(ctx context.Context, limit, offset string) ([]*entity.TrendGame, error)
 	GetDetailGame(ctx context.Context, ID uuid.UUID) (*entity.Game, error)
@@ -42,6 +44,8 @@ type GameRepository interface {
 	Insert(ctx context.Context, Game *entity.Game) error
 	GetListGame(ctx context.Context, limit, offset string) ([]*entity.ListGame, error)
 	GetListGameShop(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error)
+	SortByAsc(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error)
+	SortByDesc(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error)
 	GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Genre, error)
 	GetListTrendGame(ctx context.Context, limit, offset string) ([]*entity.TrendGame, error)
 	GetDetailGame(ctx context.Context, ID uuid.UUID) (*entity.Game, error)
@@ -81,6 +85,24 @@ func (svc GameService) GetListGameShop(ctx context.Context, ID uuid.UUID) ([]*en
 	if err != nil {
 		return nil, errors.Wrap(err, "[GameService-GetListGame]")
 	}
+	return Game, nil
+}
+
+func (svc GameService) SortByAsc(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error) {
+	Game, err := svc.GameRepo.SortByAsc(ctx, ID)
+	if err != nil {
+		return nil, errors.Wrap(err, "[GameService-SortByAsc]")
+	}
+
+	return Game, nil
+}
+
+func (svc GameService) SortByDesc(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error) {
+	Game, err := svc.GameRepo.SortByDesc(ctx, ID)
+	if err != nil {
+		return nil, errors.Wrap(err, "[GameService-SortByDesc]")
+	}
+
 	return Game, nil
 }
 

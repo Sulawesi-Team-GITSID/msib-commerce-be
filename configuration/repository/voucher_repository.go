@@ -64,6 +64,36 @@ func (repo *VoucherRepository) GetListVoucherShop(ctx context.Context, ID uuid.U
 	return models, nil
 }
 
+func (repo *VoucherRepository) SortByAsc(ctx context.Context, ID uuid.UUID) ([]*entity.VoucherShop, error) {
+	var models []*entity.VoucherShop
+	if err := repo.db.
+		WithContext(ctx).
+		Model(&entity.Voucher{}).
+		Select("voucher.id", "game_id", "shop_id", "voucher_name", "harga", "shop.name as shop").
+		Joins("inner join shop on voucher.shop_id = shop.id").Where("voucher.shop_id = '" + ID.String() + "' AND voucher.deleted = false").
+		Order("harga asc").
+		Find(&models).
+		Error; err != nil {
+		return nil, errors.Wrap(err, "[VoucherRepository-FindAll]")
+	}
+	return models, nil
+}
+
+func (repo *VoucherRepository) SortByDesc(ctx context.Context, ID uuid.UUID) ([]*entity.VoucherShop, error) {
+	var models []*entity.VoucherShop
+	if err := repo.db.
+		WithContext(ctx).
+		Model(&entity.Voucher{}).
+		Select("voucher.id", "game_id", "shop_id", "voucher_name", "harga", "shop.name as shop").
+		Joins("inner join shop on voucher.shop_id = shop.id").Where("voucher.shop_id = '" + ID.String() + "' AND voucher.deleted = false").
+		Order("harga desc").
+		Find(&models).
+		Error; err != nil {
+		return nil, errors.Wrap(err, "[VoucherRepository-FindAll]")
+	}
+	return models, nil
+}
+
 func (repo *VoucherRepository) GetDetailVoucher(ctx context.Context, ID uuid.UUID) (*entity.Voucher, error) {
 	var models *entity.Voucher
 	if err := repo.db.
