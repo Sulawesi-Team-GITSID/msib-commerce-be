@@ -59,22 +59,22 @@ func (repo *GameRepository) GetListGameShop(ctx context.Context, ID uuid.UUID) (
 		Order("game.nama_game desc").
 		Find(&models).
 		Error; err != nil {
-		return nil, errors.Wrap(err, "[GameRepository-FindAll]")
+		return nil, errors.Wrap(err, "[GameRepository-GetListGameShop]")
 	}
 	return models, nil
 }
 
-func (repo *GameRepository) SortByAsc(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error) {
-	var models []*entity.GameShop
+func (repo *GameRepository) SortGame(ctx context.Context, order, sort string) ([]*entity.ListGame, error) {
+	var models []*entity.ListGame
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Game{}).
-		Select("game.id", "game.shop_id", "game.nama_game", "game.harga", "shop.name as shop").
-		Joins("inner join shop on game.shop_id = shop.id").Where("game.shop_id = '" + ID.String() + "' AND game.deleted = false").
-		Order("game.harga asc").
+		Select("game.id", "game.shop_id", "game.nama_game", "game.harga", "genre.name as genre").
+		Joins("inner join genre on game.genre_id = genre.id").Where("game.deleted", false).
+		Order("game." + order + " " + sort).
 		Find(&models).
 		Error; err != nil {
-		return nil, errors.Wrap(err, "[GameRepository-FindAll]")
+		return nil, errors.Wrap(err, "[GameRepository-SortGame]")
 	}
 	return models, nil
 }

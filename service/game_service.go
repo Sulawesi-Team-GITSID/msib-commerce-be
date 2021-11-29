@@ -30,7 +30,7 @@ type GameUseCase interface {
 	Create(ctx context.Context, Game *entity.Game) error
 	GetListGame(ctx context.Context, limit, offset string) ([]*entity.ListGame, error)
 	GetListGameShop(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error)
-	SortByAsc(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error)
+	SortGame(ctx context.Context, order, sort string) ([]*entity.ListGame, error)
 	SortByDesc(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error)
 	GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Genre, error)
 	GetListTrendGame(ctx context.Context, limit, offset string) ([]*entity.TrendGame, error)
@@ -44,7 +44,7 @@ type GameRepository interface {
 	Insert(ctx context.Context, Game *entity.Game) error
 	GetListGame(ctx context.Context, limit, offset string) ([]*entity.ListGame, error)
 	GetListGameShop(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error)
-	SortByAsc(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error)
+	SortGame(ctx context.Context, order, sort string) ([]*entity.ListGame, error)
 	SortByDesc(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error)
 	GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Genre, error)
 	GetListTrendGame(ctx context.Context, limit, offset string) ([]*entity.TrendGame, error)
@@ -88,10 +88,10 @@ func (svc GameService) GetListGameShop(ctx context.Context, ID uuid.UUID) ([]*en
 	return Game, nil
 }
 
-func (svc GameService) SortByAsc(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error) {
-	Game, err := svc.GameRepo.SortByAsc(ctx, ID)
+func (svc GameService) SortGame(ctx context.Context, order, sort string) ([]*entity.ListGame, error) {
+	Game, err := svc.GameRepo.SortGame(ctx, order, sort)
 	if err != nil {
-		return nil, errors.Wrap(err, "[GameService-SortByAsc]")
+		return nil, errors.Wrap(err, "[GameService-SortGame]")
 	}
 
 	return Game, nil
