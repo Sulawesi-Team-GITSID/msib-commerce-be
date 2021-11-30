@@ -189,7 +189,21 @@ func (handler *VoucherHandler) SortVoucher(echoCtx echo.Context) error {
 	return echoCtx.JSON(res.Status, res)
 }
 
-func (handler *VoucherHandler) SortByDesc(echoCtx echo.Context) error {
+func (handler *VoucherHandler) SortVoucherByShop(echoCtx echo.Context) error {
+	OrderParam := echoCtx.Param("order")
+	// var order string = OrderParam
+	if len(OrderParam) == 0 {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidNullParam)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
+
+	SortParam := echoCtx.Param("sort")
+	// var sort string = SortParam
+	if len(SortParam) == 0 {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidNullParam)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
+
 	idParam := echoCtx.Param("id")
 	if len(idParam) == 0 {
 		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidNullParam)
@@ -202,14 +216,13 @@ func (handler *VoucherHandler) SortByDesc(echoCtx echo.Context) error {
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
-	Voucher, err := handler.service.SortByDesc(echoCtx.Request().Context(), id)
+	Voucher, err := handler.service.SortVoucherByShop(echoCtx.Request().Context(), OrderParam, SortParam, id)
 	if err != nil {
 		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Voucher)
 	return echoCtx.JSON(res.Status, res)
-
 }
 
 func (handler *VoucherHandler) GetDetailVoucher(echoCtx echo.Context) error {

@@ -80,14 +80,14 @@ func (repo *VoucherRepository) SortVoucher(ctx context.Context, order, sort stri
 	return models, nil
 }
 
-func (repo *VoucherRepository) SortByDesc(ctx context.Context, ID uuid.UUID) ([]*entity.VoucherShop, error) {
+func (repo *VoucherRepository) SortVoucherByShop(ctx context.Context, order, sort string, ID uuid.UUID) ([]*entity.VoucherShop, error) {
 	var models []*entity.VoucherShop
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Voucher{}).
 		Select("voucher.id", "game_id", "shop_id", "voucher_name", "harga", "shop.name as shop").
 		Joins("inner join shop on voucher.shop_id = shop.id").Where("voucher.shop_id = '" + ID.String() + "' AND voucher.deleted = false").
-		Order("harga desc").
+		Order("voucher." + order + " " + sort).
 		Find(&models).
 		Error; err != nil {
 		return nil, errors.Wrap(err, "[VoucherRepository-FindAll]")

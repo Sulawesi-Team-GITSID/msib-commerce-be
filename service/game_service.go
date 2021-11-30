@@ -31,7 +31,7 @@ type GameUseCase interface {
 	GetListGame(ctx context.Context, limit, offset string) ([]*entity.ListGame, error)
 	GetListGameShop(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error)
 	SortGame(ctx context.Context, order, sort string) ([]*entity.ListGame, error)
-	SortByDesc(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error)
+	SortGameByShop(ctx context.Context, order, sort string, ID uuid.UUID) ([]*entity.GameShop, error)
 	GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Genre, error)
 	GetListTrendGame(ctx context.Context, limit, offset string) ([]*entity.TrendGame, error)
 	GetDetailGame(ctx context.Context, ID uuid.UUID) (*entity.Game, error)
@@ -45,7 +45,7 @@ type GameRepository interface {
 	GetListGame(ctx context.Context, limit, offset string) ([]*entity.ListGame, error)
 	GetListGameShop(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error)
 	SortGame(ctx context.Context, order, sort string) ([]*entity.ListGame, error)
-	SortByDesc(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error)
+	SortGameByShop(ctx context.Context, order, sort string, ID uuid.UUID) ([]*entity.GameShop, error)
 	GetListGenre(ctx context.Context, limit, offset string) ([]*entity.Genre, error)
 	GetListTrendGame(ctx context.Context, limit, offset string) ([]*entity.TrendGame, error)
 	GetDetailGame(ctx context.Context, ID uuid.UUID) (*entity.Game, error)
@@ -97,10 +97,10 @@ func (svc GameService) SortGame(ctx context.Context, order, sort string) ([]*ent
 	return Game, nil
 }
 
-func (svc GameService) SortByDesc(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error) {
-	Game, err := svc.GameRepo.SortByDesc(ctx, ID)
+func (svc GameService) SortGameByShop(ctx context.Context, order, sort string, ID uuid.UUID) ([]*entity.GameShop, error) {
+	Game, err := svc.GameRepo.SortGameByShop(ctx, order, sort, ID)
 	if err != nil {
-		return nil, errors.Wrap(err, "[GameService-SortByDesc]")
+		return nil, errors.Wrap(err, "[GameService-SortGameByShop]")
 	}
 
 	return Game, nil
