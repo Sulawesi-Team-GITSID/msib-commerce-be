@@ -79,14 +79,14 @@ func (repo *GameRepository) SortGame(ctx context.Context, order, sort string) ([
 	return models, nil
 }
 
-func (repo *GameRepository) SortByDesc(ctx context.Context, ID uuid.UUID) ([]*entity.GameShop, error) {
+func (repo *GameRepository) SortGameByShop(ctx context.Context, order, sort string, ID uuid.UUID) ([]*entity.GameShop, error) {
 	var models []*entity.GameShop
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Game{}).
 		Select("game.id", "game.shop_id", "game.nama_game", "game.harga", "shop.name as shop").
 		Joins("inner join shop on game.shop_id = shop.id").Where("game.shop_id = '" + ID.String() + "' AND game.deleted = false").
-		Order("game.harga desc").
+		Order("game." + order + " " + sort).
 		Find(&models).
 		Error; err != nil {
 		return nil, errors.Wrap(err, "[GameRepository-FindAll]")

@@ -31,7 +31,7 @@ type VoucherUseCase interface {
 	GetListVoucher(ctx context.Context, limit, offset string) ([]*entity.ListVoucher, error)
 	GetListVoucherShop(ctx context.Context, ID uuid.UUID) ([]*entity.VoucherShop, error)
 	SortVoucher(ctx context.Context, order, sort string) ([]*entity.ListVoucher, error)
-	SortByDesc(ctx context.Context, ID uuid.UUID) ([]*entity.VoucherShop, error)
+	SortVoucherByShop(ctx context.Context, order, sort string, ID uuid.UUID) ([]*entity.VoucherShop, error)
 	GetDetailVoucher(ctx context.Context, ID uuid.UUID) (*entity.Voucher, error)
 	SearchVoucher(ctx context.Context, search string) ([]*entity.ListVoucher, error)
 	UpdateVoucher(ctx context.Context, Voucher *entity.Voucher) error
@@ -43,7 +43,7 @@ type VoucherRepository interface {
 	GetListVoucher(ctx context.Context, limit, offset string) ([]*entity.ListVoucher, error)
 	GetListVoucherShop(ctx context.Context, ID uuid.UUID) ([]*entity.VoucherShop, error)
 	SortVoucher(ctx context.Context, order, sort string) ([]*entity.ListVoucher, error)
-	SortByDesc(ctx context.Context, ID uuid.UUID) ([]*entity.VoucherShop, error)
+	SortVoucherByShop(ctx context.Context, order, sort string, ID uuid.UUID) ([]*entity.VoucherShop, error)
 	GetDetailVoucher(ctx context.Context, ID uuid.UUID) (*entity.Voucher, error)
 	SearchVoucher(ctx context.Context, search string) ([]*entity.ListVoucher, error)
 	UpdateVoucher(ctx context.Context, Voucher *entity.Voucher) error
@@ -91,10 +91,10 @@ func (svc VoucherService) SortVoucher(ctx context.Context, order, sort string) (
 	return Voucher, nil
 }
 
-func (svc VoucherService) SortByDesc(ctx context.Context, ID uuid.UUID) ([]*entity.VoucherShop, error) {
-	Voucher, err := svc.VoucherRepo.SortByDesc(ctx, ID)
+func (svc VoucherService) SortVoucherByShop(ctx context.Context, order, sort string, ID uuid.UUID) ([]*entity.VoucherShop, error) {
+	Voucher, err := svc.VoucherRepo.SortVoucherByShop(ctx, order, sort, ID)
 	if err != nil {
-		return nil, errors.Wrap(err, "[VoucherService-SortByDesc]")
+		return nil, errors.Wrap(err, "[VoucherService-SortVoucherByShop]")
 	}
 	return Voucher, nil
 }
