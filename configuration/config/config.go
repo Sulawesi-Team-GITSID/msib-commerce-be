@@ -18,6 +18,7 @@ type Config struct {
 	Env            string `env:"ENV,default=development"`
 	Database       DatabaseConfig
 	JWTConfig      JWTConfig
+	Cloudinary     CloudinaryConfig
 	InternalConfig InternalConfig
 }
 
@@ -28,6 +29,13 @@ type DatabaseConfig struct {
 	Username string `env:"DATABASE_USERNAME,required"`
 	Password string `env:"DATABASE_PASSWORD,required"`
 	Name     string `env:"DATABASE_NAME,required"`
+}
+
+type CloudinaryConfig struct {
+	Name   string `env:"CLOUDINARY_NAME,required"`
+	Key    string `env:"CLOUDINARY_API_KEY,required"`
+	Secret string `env:"CLOUDINARY_API_SECRET,required"`
+	Url    string `env:"CLOUDINARY_URL,required"`
 }
 
 // JWTConfig holds configuration for JWT secret key
@@ -69,30 +77,6 @@ func OpenDatabase(config *Config) *gorm.DB {
 	CheckError(err)
 	return db
 }
-
-// func CreateConnection() *sql.DB {
-// 	// load .env file
-// 	err := godotenv.Load("user.env")
-
-// 	if err != nil {
-// 		log.Fatalf("Error loading .env file")
-// 	}
-
-// 	// Kita buka koneksi ke db
-// 	db, err := sql.Open("postgres", os.Getenv("POSTGRES_URL"))
-
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	// check the connection
-// 	err = db.Ping()
-
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	return db
-// }
 
 func CheckError(err error) {
 	if err != nil {

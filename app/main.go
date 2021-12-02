@@ -49,8 +49,9 @@ func main() {
 	GenreHandler := buildGenreHandler(db)
 	TagsHandler := buildTagsHandler(db)
 	Tags_detailHandler := buildTags_detailHandler(db)
+	fileHandler := buildFileHandler(db)
 	// usersHandler := buildUsersHandler(db)
-	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, GameHandler, VoucherHandler, VerificationHandler, Middlewarehandler, ReviewHandler, SuperAdminHandler, ShopHandler, GenreHandler, TagsHandler, Tags_detailHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, GameHandler, VoucherHandler, VerificationHandler, Middlewarehandler, ReviewHandler, SuperAdminHandler, ShopHandler, GenreHandler, TagsHandler, Tags_detailHandler, fileHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
 
 	server := &nethttp.Server{
 		Addr:    fmt.Sprintf(":%s", cfg.Port),
@@ -176,4 +177,9 @@ func buildTags_detailHandler(db *gorm.DB) *http.Tags_detailHandler {
 	repo := repository.NewTags_detailRepository(db)
 	Tags_detailService := service.NewTags_detailService(repo)
 	return http.NewTags_detailHandler(Tags_detailService)
+}
+func buildFileHandler(db *gorm.DB) *http.FileHandler {
+	repo := repository.NewFileRepository(db)
+	fileService := service.NewFileService(repo)
+	return http.NewFileHandler(fileService)
 }
