@@ -7,6 +7,22 @@ cloud.google.com/go/internal/version
 ## explicit; go 1.16
 cloud.google.com/go/errorreporting
 cloud.google.com/go/errorreporting/apiv1beta1
+# github.com/cloudinary/cloudinary-go v1.4.0
+## explicit; go 1.15
+github.com/cloudinary/cloudinary-go
+github.com/cloudinary/cloudinary-go/api
+github.com/cloudinary/cloudinary-go/api/admin
+github.com/cloudinary/cloudinary-go/api/admin/metadata
+github.com/cloudinary/cloudinary-go/api/admin/search
+github.com/cloudinary/cloudinary-go/api/uploader
+github.com/cloudinary/cloudinary-go/asset
+github.com/cloudinary/cloudinary-go/config
+github.com/cloudinary/cloudinary-go/internal/signature
+github.com/cloudinary/cloudinary-go/logger
+github.com/cloudinary/cloudinary-go/transformation
+# github.com/creasty/defaults v1.5.1
+## explicit; go 1.13
+github.com/creasty/defaults
 # github.com/davecgh/go-spew v1.1.1
 ## explicit
 github.com/davecgh/go-spew/spew
@@ -49,6 +65,9 @@ github.com/google/uuid
 # github.com/googleapis/gax-go/v2 v2.0.5
 ## explicit
 github.com/googleapis/gax-go/v2
+# github.com/gorilla/schema v1.2.0
+## explicit
+github.com/gorilla/schema
 # github.com/jackc/chunkreader/v2 v2.0.1
 ## explicit; go 1.12
 github.com/jackc/chunkreader/v2

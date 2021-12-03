@@ -31,6 +31,7 @@ var (
 	// ErrInvalidUUIDFormat is returned when the request UUID format is wrong
 	ErrInvalidUUIDFormat = NewAuthError("01-19", "Invalid UUID Format")
 	ErrInvalidNullParam  = NewAuthError("01-20", "No Param detected")
+	ErrInvalidFileFormat = NewAuthError("01-21", "No File Found")
 )
 
 // AuthError represents error happens from authentication service.
