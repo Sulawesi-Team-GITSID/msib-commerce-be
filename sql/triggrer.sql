@@ -42,20 +42,27 @@ CREATE TRIGGER trigger_seller
   FOR EACH ROW
   EXECUTE PROCEDURE seller_function();
 
-/* for audit only */
-CREATE FUNCTION audits_function() 
-   RETURNS TRIGGER 
-   LANGUAGE PLPGSQL
-AS $$
+/* for sixth */
+CREATE OR REPLACE FUNCTION public.file_function()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
 BEGIN
-	INSERT INTO audits(table_name, action_name, changed_on)
-         VALUES(TG_TABLE_NAME, TG_OP, now());
+        IF NEW.path = 'profile' THEN
+            update public.profile set image_url = new.image_url where id = new.entity_id;
+        END IF;
+        IF NEW.path = 'game' THEN
+            update public.game set game.image_url = new.image_url where profile.id = new.entity_id;
+        END IF;
     RETURN NEW;
 END;
-$$
+$function$
+;
 
-CREATE TRIGGER audits_genre
+
+
+CREATE TRIGGER file_activate
   AFTER INSERT OR UPDATE OR DELETE
-  ON genre
+  ON file
   FOR EACH ROW
-  EXECUTE PROCEDURE audits_function();
+  EXECUTE PROCEDURE file_function();

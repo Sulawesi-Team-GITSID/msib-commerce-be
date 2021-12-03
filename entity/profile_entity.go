@@ -14,6 +14,7 @@ const (
 type Profile struct {
 	Id            uuid.UUID   `gorm:"type:uuid;primary_key" json:"id"`
 	Credential_id uuid.UUID   `gorm:"type:uuid;not_null" json:"credential_id"`
+	Image_url     string      `gorm:"type:varchar;null" json:"image_url"`
 	First_name    string      `gorm:"type:varchar;not_null" json:"first_name"`
 	Last_name     string      `gorm:"type:varchar;not_null" json:"last_name"`
 	Phone         string      `gorm:"type:varchar;not_null;unique" json:"phone"`
@@ -22,10 +23,11 @@ type Profile struct {
 	Credential    *Credential `gorm:"foreignKey:Credential_id"`
 }
 
-func NewProfile(id, credential_id uuid.UUID, first_name, last_name, phone, gender string, birthday time.Time) *Profile {
+func NewProfile(id, credential_id uuid.UUID, image_url, first_name, last_name, phone, gender string, birthday time.Time) *Profile {
 	return &Profile{
 		Id:            id,
 		Credential_id: credential_id,
+		Image_url:     image_url,
 		First_name:    first_name,
 		Last_name:     last_name,
 		Phone:         phone,

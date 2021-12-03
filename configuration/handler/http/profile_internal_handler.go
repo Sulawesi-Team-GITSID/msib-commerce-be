@@ -121,6 +121,7 @@ func (handler *ProfileHandler) CreateProfile(echoCtx echo.Context) error {
 	ProfileEntity := entity.NewProfile(
 		uuid.Nil,
 		form.Credential_id,
+		"",
 		form.First_name,
 		form.Last_name,
 		form.Phone,
@@ -207,6 +208,7 @@ func (handler *ProfileHandler) UpdateProfile(echoCtx echo.Context) error {
 	ProfileEntity := entity.NewProfile(
 		id,
 		form.Credential_id,
+		"",
 		form.First_name,
 		form.Last_name,
 		form.Phone,
