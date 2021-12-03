@@ -85,12 +85,6 @@ func (handler *FileHandler) CreateFile(echoCtx echo.Context) error {
 	cfg, _ := config.NewConfig(".env")
 	cld, err := cloudinary.NewFromParams(cfg.Cloudinary.Name, cfg.Cloudinary.Key, cfg.Cloudinary.Secret)
 
-	fileEntity := entity.NewFile(
-		newuuid,
-		uuid.MustParse(form.Entity_id),
-		form.Folder+"/"+fileName,
-	)
-
 	// Determine the content type of the image file
 	mimeType := http.DetectContentType(byteFile)
 
@@ -120,11 +114,16 @@ func (handler *FileHandler) CreateFile(echoCtx echo.Context) error {
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 	// log.Printf("Error : ", err)
+	fileEntity := entity.NewFile(
+		newuuid,
+		uuid.MustParse(form.Entity_id),
+		form.Folder,
+		resp.URL,
+	)
 	if err := handler.service.Create(echoCtx.Request().Context(), fileEntity); err != nil {
 		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
-
 	var res = entity.NewResponse(nethttp.StatusCreated, "Request processed successfully.", resp)
 	return echoCtx.JSON(res.Status, res)
 }
