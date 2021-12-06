@@ -39,7 +39,7 @@ func (repo *GameRepository) GetListGame(ctx context.Context, limit, offset strin
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Game{}).
-		Select("game.id", "game.shop_id", "game.nama_game", "game.harga", "genre.name as genre").
+		Select("game.id", "game.shop_id", "game.nama_game", "game.image_url", "game.harga", "genre.name as genre").
 		Joins("inner join genre on game.genre_id = genre.id").Where("game.deleted", false).
 		Order("game.nama_game desc").
 		Find(&models).
@@ -54,7 +54,7 @@ func (repo *GameRepository) GetListGameShop(ctx context.Context, ID uuid.UUID) (
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Game{}).
-		Select("game.id", "game.shop_id", "game.nama_game", "game.harga", "shop.name as shop").
+		Select("game.id", "game.shop_id", "game.nama_game", "game.image_url", "game.harga", "shop.name as shop").
 		Joins("inner join shop on game.shop_id = shop.id").Where("game.shop_id = '" + ID.String() + "' AND game.deleted = false").
 		Order("game.nama_game desc").
 		Find(&models).
@@ -69,7 +69,7 @@ func (repo *GameRepository) SortGame(ctx context.Context, order, sort string) ([
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Game{}).
-		Select("game.id", "game.shop_id", "game.nama_game", "game.harga", "genre.name as genre").
+		Select("game.id", "game.shop_id", "game.nama_game", "game.image_url", "game.harga", "genre.name as genre").
 		Joins("inner join genre on game.genre_id = genre.id").Where("game.deleted", false).
 		Order("game." + order + " " + sort).
 		Find(&models).
@@ -84,7 +84,7 @@ func (repo *GameRepository) SortGameByShop(ctx context.Context, order, sort stri
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Game{}).
-		Select("game.id", "game.shop_id", "game.nama_game", "game.harga", "shop.name as shop").
+		Select("game.id", "game.shop_id", "game.nama_game", "game.image_url", "game.harga", "shop.name as shop").
 		Joins("inner join shop on game.shop_id = shop.id").Where("game.shop_id = '" + ID.String() + "' AND game.deleted = false").
 		Order("game." + order + " " + sort).
 		Find(&models).
@@ -112,7 +112,7 @@ func (repo *GameRepository) GetListTrendGame(ctx context.Context, limit, offset 
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Game{}).
-		Select("game.id", "nama_game", "harga", "avg(rating) as rating").Group("game.id").
+		Select("game.id", "nama_game", "harga", "image_url", "avg(rating) as rating").Group("game.id").
 		Joins("inner join review on review.game_id = game.id").Order("rating desc").
 		Find(&models).
 		Error; err != nil {
@@ -138,7 +138,7 @@ func (repo *GameRepository) SearchGame(ctx context.Context, search string) ([]*e
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Game{}).
-		Select("game.id", "game.shop_id", "game.nama_game", "game.harga", "genre.name as genre").
+		Select("game.id", "game.shop_id", "game.nama_game", "game.image_url", "game.harga", "genre.name as genre").
 		Joins("inner join genre on game.genre_id = genre.id").
 		Where("lower(nama_game) LIKE lower('%" + search + "%') AND game.deleted = false").Order("game.nama_game desc").
 		Find(&models).

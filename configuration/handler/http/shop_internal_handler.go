@@ -106,6 +106,7 @@ func (handler *ShopHandler) CreateShop(echoCtx echo.Context) error {
 	ShopEntity := entity.NewShop(
 		uuid.Nil,
 		form.Credential_id,
+		"",
 		form.Name,
 		form.Location,
 	)
@@ -212,6 +213,7 @@ func (handler *ShopHandler) UpdateShop(echoCtx echo.Context) error {
 	ShopEntity := entity.NewShop(
 		id,
 		form.Credential_id,
+		"",
 		form.Name,
 		form.Location,
 	)

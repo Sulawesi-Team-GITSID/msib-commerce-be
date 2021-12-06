@@ -150,6 +150,7 @@ func (handler *CredentialHandler) CreateCredential(echoCtx echo.Context) error {
 	uuidsaver := uuid.New()
 	CredentialEntity := entity.NewCredential(
 		uuidsaver,
+		"",
 		form.Username,
 		form.Email,
 		form.Password,
@@ -259,6 +260,7 @@ func (handler *CredentialHandler) UpdateCredentialVerify(echoCtx echo.Context) e
 
 	CredentialEntity := entity.NewCredential(
 		id,
+		"",
 		form.Username,
 		form.Email,
 		form.Password,
@@ -330,6 +332,7 @@ func (handler *CredentialHandler) ForgotPassword(echoCtx echo.Context) error {
 
 	CredentialEntity := entity.NewCredential(
 		id,
+		"",
 		form.Username,
 		form.Email,
 		form.Password,
