@@ -115,6 +115,7 @@ func (handler *GameHandler) CreateGame(echoCtx echo.Context) error {
 	GameEntity := entity.NewGame(
 		uuid.Nil,
 		form.Shop_id,
+		"",
 		form.NamaGame,
 		form.Harga,
 		form.Genre_id,
@@ -342,6 +343,7 @@ func (handler *GameHandler) UpdateGame(echoCtx echo.Context) error {
 	GameEntity := entity.NewGame(
 		id,
 		form.Shop_id,
+		"",
 		form.NamaGame,
 		form.Harga,
 		form.Genre_id,
