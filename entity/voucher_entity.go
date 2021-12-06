@@ -26,6 +26,7 @@ type ListVoucher struct {
 	Shop_id      uuid.UUID `json:"shop_id"`
 	Shop_name    string    `json:"shop_name"`
 	Voucher_name string    `json:"voucher_name"`
+	Image_url    string    `json:"image_url"`
 	Harga        int       `json:"harga"`
 }
 
@@ -34,6 +35,7 @@ type VoucherShop struct {
 	Game_id     uuid.UUID `json:"game_id"`
 	Shop_id     uuid.UUID `json:"shop_id"`
 	VoucherName string    `json:"voucher_name"`
+	Image_url   string    `json:"image_url"`
 	Harga       int       `json:"harga"`
 	Shop        string    `json:"shop"`
 }

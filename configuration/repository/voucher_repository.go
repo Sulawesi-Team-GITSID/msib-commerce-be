@@ -39,7 +39,7 @@ func (repo *VoucherRepository) GetListVoucher(ctx context.Context, limit, offset
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Voucher{}).
-		Select("voucher.id, voucher.game_id, game.nama_game as game_name, voucher.shop_id, shop.name as shop_name, voucher.voucher_name, voucher.harga").
+		Select("voucher.id, voucher.game_id, game.nama_game as game_name, voucher.shop_id, shop.name as shop_name, voucher.voucher_name, voucher.image_url, voucher.harga").
 		Joins("join game on voucher.game_id = game.id join shop on shop.id = voucher.shop_id").
 		Where("voucher.deleted", false).
 		Find(&models).
@@ -54,7 +54,7 @@ func (repo *VoucherRepository) GetListVoucherShop(ctx context.Context, ID uuid.U
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Voucher{}).
-		Select("voucher.id", "game_id", "shop_id", "voucher_name", "harga", "shop.name as shop").
+		Select("voucher.id", "game_id", "shop_id", "voucher_name", "voucher.image_url", "harga", "shop.name as shop").
 		Joins("inner join shop on voucher.shop_id = shop.id").Where("voucher.shop_id = '" + ID.String() + "' AND voucher.deleted = false").
 		Order("voucher_name desc").
 		Find(&models).
@@ -69,7 +69,7 @@ func (repo *VoucherRepository) SortVoucher(ctx context.Context, order, sort stri
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Voucher{}).
-		Select("voucher.id, voucher.game_id, game.nama_game as game_name, voucher.shop_id, shop.name as shop_name, voucher.voucher_name, voucher.harga").
+		Select("voucher.id, voucher.game_id, game.nama_game as game_name, voucher.shop_id, shop.name as shop_name, voucher.voucher_name, voucher.image_url, voucher.harga").
 		Joins("join game on voucher.game_id = game.id join shop on shop.id = voucher.shop_id").
 		Where("voucher.deleted", false).
 		Order("voucher." + order + " " + sort).
@@ -85,7 +85,7 @@ func (repo *VoucherRepository) SortVoucherByShop(ctx context.Context, order, sor
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Voucher{}).
-		Select("voucher.id", "game_id", "shop_id", "voucher_name", "harga", "shop.name as shop").
+		Select("voucher.id", "game_id", "shop_id", "voucher_name", "voucher.image_url", "harga", "shop.name as shop").
 		Joins("inner join shop on voucher.shop_id = shop.id").Where("voucher.shop_id = '" + ID.String() + "' AND voucher.deleted = false").
 		Order("voucher." + order + " " + sort).
 		Find(&models).
@@ -112,7 +112,7 @@ func (repo *VoucherRepository) SearchVoucher(ctx context.Context, search string)
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Voucher{}).
-		Select("voucher.id, voucher.game_id, game.nama_game as game_name, voucher.shop_id, shop.name as shop_name, voucher.voucher_name, voucher.harga").
+		Select("voucher.id, voucher.game_id, game.nama_game as game_name, voucher.shop_id, shop.name as shop_name, voucher.voucher_name, voucher.image_url, voucher.harga").
 		Joins("join game on voucher.game_id = game.id join shop on shop.id = voucher.shop_id").
 		Where("lower(voucher_name) LIKE lower('%" + search + "%') AND voucher.deleted = false").
 		Find(&models).

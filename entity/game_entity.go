@@ -25,26 +25,29 @@ type ListGenre struct {
 
 // ListGame struct is a model for collecting query genre.name
 type ListGame struct {
-	Id       uuid.UUID `json:"id"`
-	Shop_id  uuid.UUID `json:"shop_id"`
-	NamaGame string    `json:"nama_game"`
-	Harga    int       `json:"harga"`
-	Genre    string    `json:"genre"`
+	Id        uuid.UUID `json:"id"`
+	Shop_id   uuid.UUID `json:"shop_id"`
+	NamaGame  string    `json:"nama_game"`
+	Image_url string    `json:"image_url"`
+	Harga     int       `json:"harga"`
+	Genre     string    `json:"genre"`
 }
 
 type GameShop struct {
-	Id       uuid.UUID `json:"id"`
-	Shop_id  uuid.UUID `json:"shop_id"`
-	NamaGame string    `json:"nama_game"`
-	Harga    int       `json:"harga"`
-	Shop     string    `json:"shop"`
+	Id        uuid.UUID `json:"id"`
+	Shop_id   uuid.UUID `json:"shop_id"`
+	NamaGame  string    `json:"nama_game"`
+	Image_url string    `json:"image_url"`
+	Harga     int       `json:"harga"`
+	Shop      string    `json:"shop"`
 }
 
 type TrendGame struct {
-	Id       uuid.UUID `json:"id"`
-	NamaGame string    `json:"nama_game"`
-	Harga    int       `json:"harga"`
-	Rating   float64   `json:"rating"`
+	Id        uuid.UUID `json:"id"`
+	NamaGame  string    `json:"nama_game"`
+	Harga     int       `json:"harga"`
+	Image_url string    `json:"image_url"`
+	Rating    float64   `json:"rating"`
 }
 
 func NewGame(id, shop_id uuid.UUID, image_url, nama_game string, harga int, genre_id uuid.UUID, deleted bool) *Game {
