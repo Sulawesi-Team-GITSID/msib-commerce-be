@@ -52,7 +52,7 @@ func (repo *WishlistRepository) GetGame(ctx context.Context, ID uuid.UUID) ([]*e
 		WithContext(ctx).
 		Model(&entity.Wishlist{}).
 		Select("credential_id, game.nama_game as game").
-		Joins("inner join game on game.id = game_id").Where("game_id", ID).
+		Joins("inner join game on game.id = game_id").Where("credential_id", ID).
 		Order("game.nama_game asc").
 		Find(&models).
 		Error; err != nil {
