@@ -113,7 +113,7 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	// engine.GET("/get-wishlist/:id", wishlistHandler.GetDetailwishlist)
 	engine.GET("/get-wishlist-game/:id", wishlistHandler.GetGame)
 	engine.PUT("/update-wishlist/:id", wishlistHandler.UpdateWishlist)
-	engine.DELETE("/delete-wishlist/:id", wishlistHandler.DeleteWishlist)
+	engine.DELETE("/delete-wishlist/:credential_id/:game", wishlistHandler.DeleteWishlist)
 
 	//searching
 	engine.POST("/search-game", gameHandler.SearchGame)

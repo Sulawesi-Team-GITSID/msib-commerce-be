@@ -32,7 +32,7 @@ type WishlistUseCase interface {
 	GetGame(ctx context.Context, ID uuid.UUID) ([]*entity.WishlistGame, error)
 	GetDetailWishlist(ctx context.Context, ID uuid.UUID) (*entity.Wishlist, error)
 	UpdateWishlist(ctx context.Context, Wishlist *entity.Wishlist) error
-	DeleteWishlist(ctx context.Context, ID uuid.UUID) error
+	DeleteWishlist(ctx context.Context, credential_id uuid.UUID, game string) error
 }
 
 type WishlistRepository interface {
@@ -41,7 +41,7 @@ type WishlistRepository interface {
 	GetGame(ctx context.Context, ID uuid.UUID) ([]*entity.WishlistGame, error)
 	GetDetailWishlist(ctx context.Context, ID uuid.UUID) (*entity.Wishlist, error)
 	UpdateWishlist(ctx context.Context, Wishlist *entity.Wishlist) error
-	DeleteWishlist(ctx context.Context, ID uuid.UUID) error
+	DeleteWishlist(ctx context.Context, credential_id uuid.UUID, game string) error
 }
 
 func (svc WishlistService) Create(ctx context.Context, Wishlist *entity.Wishlist) error {
@@ -79,8 +79,8 @@ func (svc WishlistService) GetDetailWishlist(ctx context.Context, ID uuid.UUID) 
 	return Wishlist, nil
 }
 
-func (svc WishlistService) DeleteWishlist(ctx context.Context, ID uuid.UUID) error {
-	err := svc.WishlistRepo.DeleteWishlist(ctx, ID)
+func (svc WishlistService) DeleteWishlist(ctx context.Context, credential_id uuid.UUID, game string) error {
+	err := svc.WishlistRepo.DeleteWishlist(ctx, credential_id, game)
 	if err != nil {
 		return errors.Wrap(err, "[WishlistService-DeleteWishlist]")
 	}

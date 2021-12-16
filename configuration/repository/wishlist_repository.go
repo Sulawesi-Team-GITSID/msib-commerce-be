@@ -73,10 +73,11 @@ func (repo *WishlistRepository) GetDetailWishlist(ctx context.Context, ID uuid.U
 	return models, nil
 }
 
-func (repo *WishlistRepository) DeleteWishlist(ctx context.Context, ID uuid.UUID) error {
+func (repo *WishlistRepository) DeleteWishlist(ctx context.Context, credential_id uuid.UUID, game string) error {
 	if err := repo.db.
-		WithContext(ctx).
-		Delete(&entity.Wishlist{Game_id: ID}).Error; err != nil {
+		WithContext(ctx).Where("credential_id = '" + credential_id.String() + "' AND game_id = (select id from game where nama_game='" + game + "')").
+		Delete(&entity.Wishlist{}).
+		Error; err != nil {
 		return errors.Wrap(err, "[WishlistRepository-Delete]")
 	}
 	return nil

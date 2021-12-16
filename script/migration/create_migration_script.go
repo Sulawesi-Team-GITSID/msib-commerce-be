@@ -39,6 +39,7 @@ func main() {
 
 	// Migrate rest of the models
 	log.Info().Msg("AutoMigrate Model [table_name]")
+
 	db.AutoMigrate(&entity.Credential{})
 	log.Info().Msg("  TableModel [" + (&entity.Credential{}).TableName() + "]")
 	db.AutoMigrate(&entity.Profile{})

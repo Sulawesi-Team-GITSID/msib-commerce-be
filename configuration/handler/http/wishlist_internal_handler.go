@@ -213,19 +213,20 @@ func (handler *WishlistHandler) UpdateWishlist(echoCtx echo.Context) error {
 }
 
 func (handler *WishlistHandler) DeleteWishlist(echoCtx echo.Context) error {
-	idParam := echoCtx.Param("id")
-	if len(idParam) == 0 {
+	credential_idParam := echoCtx.Param("credential_id")
+	game_Param := echoCtx.Param("game")
+	if len(credential_idParam) == 0 {
 		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidInput)
 		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
 	}
 
-	id, err := uuid.Parse(idParam)
+	id, err := uuid.Parse(credential_idParam)
 	if err != nil {
 		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
 	}
 
-	err = handler.service.DeleteWishlist(echoCtx.Request().Context(), id)
+	err = handler.service.DeleteWishlist(echoCtx.Request().Context(), id, game_Param)
 	if err != nil {
 		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
