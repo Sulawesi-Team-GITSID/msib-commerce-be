@@ -39,6 +39,7 @@ func main() {
 
 	// Migrate rest of the models
 	log.Info().Msg("AutoMigrate Model [table_name]")
+
 	db.AutoMigrate(&entity.Credential{})
 	log.Info().Msg("  TableModel [" + (&entity.Credential{}).TableName() + "]")
 	db.AutoMigrate(&entity.Profile{})
@@ -65,6 +66,8 @@ func main() {
 	log.Info().Msg("  TableModel [" + (&entity.Tags_detail{}).TableName() + "]")
 	db.AutoMigrate(&entity.File{})
 	log.Info().Msg("  TableModel [" + (&entity.File{}).TableName() + "]")
+	db.AutoMigrate(&entity.Wishlist{})
+	log.Info().Msg("  TableModel [" + (&entity.Wishlist{}).TableName() + "]")
 
 	// db.AutoMigrate(&entity.Users{})
 	// log.Info().Msg("  TableModel [" + (&entity.Users{}).TableName() + "]")

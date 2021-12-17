@@ -76,7 +76,8 @@ func (repo *Tags_detailRepository) GetDetailTags_detail(ctx context.Context, ID 
 func (repo *Tags_detailRepository) DeleteTags_detail(ctx context.Context, ID uuid.UUID) error {
 	if err := repo.db.
 		WithContext(ctx).
-		Delete(&entity.Tags_detail{Game_id: ID}).Error; err != nil {
+		Delete(&entity.Tags_detail{Game_id: ID}).Where("game_id", ID).
+		Error; err != nil {
 		return errors.Wrap(err, "[Tags_detailRepository-Delete]")
 	}
 	return nil

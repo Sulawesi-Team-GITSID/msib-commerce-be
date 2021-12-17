@@ -7,7 +7,7 @@ import (
 // NewGinEngine creates an instance of echo.Engine.
 // gin.Engine already implements net/http.Handler interface.
 
-func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileHandler, gameHandler *GameHandler, voucherHandler *VoucherHandler, verificationHandler *VerificationHandler, Middlewarehandler *Middlewarehandler, reviewHandler *ReviewHandler, superAdminHandler *SuperAdminHandler, shopHandler *ShopHandler, genreHandler *GenreHandler, tagsHandler *TagsHandler, tags_detailHandler *Tags_detailHandler, fileHandler *FileHandler, internalUsername, internalPassword string) *echo.Echo {
+func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileHandler, gameHandler *GameHandler, voucherHandler *VoucherHandler, verificationHandler *VerificationHandler, Middlewarehandler *Middlewarehandler, reviewHandler *ReviewHandler, superAdminHandler *SuperAdminHandler, shopHandler *ShopHandler, genreHandler *GenreHandler, tagsHandler *TagsHandler, tags_detailHandler *Tags_detailHandler, fileHandler *FileHandler, wishlistHandler *WishlistHandler, internalUsername, internalPassword string) *echo.Echo {
 	engine := echo.New()
 
 	// CORS
@@ -106,6 +106,14 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	engine.GET("/get-gametags/:id", tags_detailHandler.GetGameTags)
 	engine.PUT("/update-gametags/:id", tags_detailHandler.UpdateTags_detail)
 	engine.DELETE("/delete-gametags/:id", tags_detailHandler.DeleteTags_detail)
+
+	//wishlist
+	engine.POST("/create-wishlist", wishlistHandler.CreateWishlist)
+	engine.GET("/list-wishlist", wishlistHandler.GetListWishlist)
+	// engine.GET("/get-wishlist/:id", wishlistHandler.GetDetailwishlist)
+	engine.GET("/get-wishlist-game/:id", wishlistHandler.GetGame)
+	engine.PUT("/update-wishlist/:id", wishlistHandler.UpdateWishlist)
+	engine.DELETE("/delete-wishlist/:credential_id/:game", wishlistHandler.DeleteWishlist)
 
 	//searching
 	engine.POST("/search-game", gameHandler.SearchGame)

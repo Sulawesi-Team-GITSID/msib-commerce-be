@@ -50,8 +50,9 @@ func main() {
 	TagsHandler := buildTagsHandler(db)
 	Tags_detailHandler := buildTags_detailHandler(db)
 	fileHandler := buildFileHandler(db)
+	WishlistHandler := buildWishlistHandler(db)
 	// usersHandler := buildUsersHandler(db)
-	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, GameHandler, VoucherHandler, VerificationHandler, Middlewarehandler, ReviewHandler, SuperAdminHandler, ShopHandler, GenreHandler, TagsHandler, Tags_detailHandler, fileHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+	engine := http.NewGinEngine(CredentialHandler, ProfileHandler, GameHandler, VoucherHandler, VerificationHandler, Middlewarehandler, ReviewHandler, SuperAdminHandler, ShopHandler, GenreHandler, TagsHandler, Tags_detailHandler, fileHandler, WishlistHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
 
 	server := &nethttp.Server{
 		Addr:    fmt.Sprintf(":%s", cfg.Port),
@@ -182,4 +183,9 @@ func buildFileHandler(db *gorm.DB) *http.FileHandler {
 	repo := repository.NewFileRepository(db)
 	fileService := service.NewFileService(repo)
 	return http.NewFileHandler(fileService)
+}
+func buildWishlistHandler(db *gorm.DB) *http.WishlistHandler {
+	repo := repository.NewWishlistRepository(db)
+	WishlistService := service.NewWishlistService(repo)
+	return http.NewWishlistHandler(WishlistService)
 }
