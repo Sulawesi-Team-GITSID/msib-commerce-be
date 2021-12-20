@@ -58,7 +58,7 @@ func NewGinEngine(credentialHandler *CredentialHandler, profileHandler *ProfileH
 	engine.GET("/list-game-shop/:id", gameHandler.GetListGameShop)
 	engine.GET("/sort-game/:order/:sort", gameHandler.SortGame)
 	engine.GET("/sort-game-shop/:order/:sort/:id", gameHandler.SortGameByShop)
-	engine.GET("/list-trend-game", gameHandler.GetListTrendGame)
+	engine.GET("/list-trend-game/:sort", gameHandler.GetListTrendGame)
 	engine.GET("/get-game/:id", gameHandler.GetDetailGame)
 	engine.PUT("/update-game/:id", gameHandler.UpdateGame)
 	engine.DELETE("/delete-game/:id", gameHandler.DeleteGame)
