@@ -256,8 +256,14 @@ func (handler *GameHandler) GetListTrendGame(echoCtx echo.Context) error {
 		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
+	SortParam := echoCtx.Param("sort")
+	// var sort string = SortParam
+	if len(SortParam) == 0 {
+		errorResponse := buildErrorResponse(nethttp.StatusBadRequest, nil, entity.ErrInvalidNullParam)
+		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
+	}
 
-	Game, err := handler.service.GetListTrendGame(echoCtx.Request().Context(), form.Limit, form.Offset)
+	Game, err := handler.service.GetListTrendGame(echoCtx.Request().Context(), form.Limit, form.Offset, SortParam)
 	if err != nil {
 		errorResponse := buildErrorResponse(nethttp.StatusInternalServerError, err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)

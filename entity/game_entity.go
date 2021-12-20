@@ -47,6 +47,7 @@ type TrendGame struct {
 	NamaGame  string    `json:"nama_game"`
 	Harga     int       `json:"harga"`
 	Image_url string    `json:"image_url"`
+	Shop_id   uuid.UUID `json:"shop_id"`
 	Rating    float64   `json:"rating"`
 }
 

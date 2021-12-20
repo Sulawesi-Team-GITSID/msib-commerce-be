@@ -51,7 +51,8 @@ func (repo *ProfileRepository) GetDetailProfile(ctx context.Context, ID uuid.UUI
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Profile{}).
-		Take(&models, ID).
+		Where("credential_id", ID).
+		Find(&models).
 		Error; err != nil {
 		return nil, errors.Wrap(err, "[ProfileRepository-FindById]")
 	}
