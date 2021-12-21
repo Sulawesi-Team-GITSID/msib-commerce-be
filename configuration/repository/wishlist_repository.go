@@ -51,7 +51,7 @@ func (repo *WishlistRepository) GetGame(ctx context.Context, ID uuid.UUID) ([]*e
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Wishlist{}).
-		Select("credential_id, game.nama_game as game").
+		Select("credential_id, game_id, game.nama_game, game.image_url, game.harga").
 		Joins("inner join game on game.id = game_id").Where("credential_id", ID).
 		Order("game.nama_game asc").
 		Find(&models).
