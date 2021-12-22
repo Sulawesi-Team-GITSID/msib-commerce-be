@@ -83,7 +83,7 @@ func (repo *ShopRepository) UpdateShop(ctx context.Context, ent *entity.Shop) er
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Shop{Id: ent.Id}).
-		Select("name", "location").
+		Select("name", "phone", "location").
 		Updates(ent).Error; err != nil {
 		return errors.Wrap(err, "[ShopRepository-Update]")
 	}

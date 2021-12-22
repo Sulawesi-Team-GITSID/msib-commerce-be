@@ -16,7 +16,10 @@ type Wishlist struct {
 
 type WishlistGame struct {
 	Credential_id uuid.UUID `json:"credential_id"`
-	Game          string    `json:"game"`
+	Game_id       string    `json:"game_id"`
+	NamaGame      string    `json:"nama_game"`
+	Image_url     string    `json:"image_url"`
+	Harga         int       `json:"harga"`
 }
 
 type WishlistGame_id struct {

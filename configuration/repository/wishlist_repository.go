@@ -51,7 +51,7 @@ func (repo *WishlistRepository) GetGame(ctx context.Context, ID uuid.UUID) ([]*e
 	if err := repo.db.
 		WithContext(ctx).
 		Model(&entity.Wishlist{}).
-		Select("credential_id, game.nama_game as game").
+		Select("credential_id, game_id, game.nama_game, game.image_url, game.harga").
 		Joins("inner join game on game.id = game_id").Where("credential_id", ID).
 		Order("game.nama_game asc").
 		Find(&models).
@@ -75,7 +75,7 @@ func (repo *WishlistRepository) GetDetailWishlist(ctx context.Context, ID uuid.U
 
 func (repo *WishlistRepository) DeleteWishlist(ctx context.Context, credential_id uuid.UUID, game string) error {
 	if err := repo.db.
-		WithContext(ctx).Where("credential_id = '" + credential_id.String() + "' AND game_id = (select id from game where nama_game='" + game + "')").
+		WithContext(ctx).Where("credential_id = '" + credential_id.String() + "' AND game_id = '" + game + "'").
 		Delete(&entity.Wishlist{}).
 		Error; err != nil {
 		return errors.Wrap(err, "[WishlistRepository-Delete]")

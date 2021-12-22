@@ -15,6 +15,7 @@ import (
 type CreateShopBodyRequest struct {
 	Credential_id uuid.UUID `json:"Credential_id"`
 	Name          string    `json:"name"`
+	Phone         string    `json:"phone"`
 	Location      string    `json:"location"`
 }
 
@@ -23,6 +24,7 @@ type ShopRowResponse struct {
 	Id            uuid.UUID `json:"id"`
 	Credential_id uuid.UUID `json:"Credential_id"`
 	Name          string    `json:"name"`
+	Phone         string    `json:"phone"`
 	Location      string    `json:"location"`
 }
 
@@ -31,6 +33,7 @@ type ShopDetailResponse struct {
 	Id            uuid.UUID `json:"id"`
 	Credential_id uuid.UUID `json:"Credential_id"`
 	Name          string    `json:"name"`
+	Phone         string    `json:"phone"`
 	Location      string    `json:"location"`
 }
 
@@ -39,6 +42,7 @@ func buildShopRowResponse(Shop *entity.Shop) ShopRowResponse {
 		Id:            Shop.Id,
 		Credential_id: Shop.Credential_id,
 		Name:          Shop.Name,
+		Phone:         Shop.Phone,
 		Location:      Shop.Location,
 	}
 
@@ -50,6 +54,7 @@ func buildShopDetailResponse(Shop *entity.Shop) ShopDetailResponse {
 		Id:            Shop.Id,
 		Credential_id: Shop.Credential_id,
 		Name:          Shop.Name,
+		Phone:         Shop.Phone,
 		Location:      Shop.Location,
 	}
 
@@ -108,6 +113,7 @@ func (handler *ShopHandler) CreateShop(echoCtx echo.Context) error {
 		form.Credential_id,
 		"",
 		form.Name,
+		form.Phone,
 		form.Location,
 	)
 
@@ -215,6 +221,7 @@ func (handler *ShopHandler) UpdateShop(echoCtx echo.Context) error {
 		form.Credential_id,
 		"",
 		form.Name,
+		form.Phone,
 		form.Location,
 	)
 
